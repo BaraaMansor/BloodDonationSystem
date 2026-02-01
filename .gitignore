@@ -6,3 +6,4 @@ obj/
 *.log
 .vscode/
 *.md
+!README.md
