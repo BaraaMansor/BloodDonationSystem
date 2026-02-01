@@ -1,0 +1,210 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
+        <p class="text-muted">Welcome, @Context.Session.GetString("UserName")!</p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card donors">
+            <div class="card-body">
+                <h5 class="text-muted"><i class="fas fa-users"></i> Total Donors</h5>
+                <h2 class="mb-0">@Model.TotalDonors</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card donations">
+            <div class="card-body">
+                <h5 class="text-muted"><i class="fas fa-hand-holding-heart"></i> Total Donations</h5>
+                <h2 class="mb-0">@Model.TotalDonations</h2>
+                <small class="text-muted">Pending: @Model.PendingDonations</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card requests">
+            <div class="card-body">
+                <h5 class="text-muted"><i class="fas fa-hospital"></i> Blood Requests</h5>
+                <h2 class="mb-0">@Model.TotalBloodRequests</h2>
+                <small class="text-muted">Pending: @Model.PendingRequests</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card blood-types">
+            <div class="card-body">
+                <h5 class="text-muted"><i class="fas fa-user-friends"></i> Total Users</h5>
+                <h2 class="mb-0">@Model.TotalUsers</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="/Admin/Users" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-users"></i> Manage Users
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="/Admin/Donations" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-hand-holding-heart"></i> Manage Donations
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="/Admin/BloodRequests" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-hospital"></i> Manage Requests
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="/Admin/Reports" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-chart-bar"></i> View Reports
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blood Type Statistics -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-tint"></i> Blood Type Statistics</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Blood Type</th>
+                                <th>Donors</th>
+                                <th>Completed Donations</th>
+                                <th>Pending Requests</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var stat in Model.BloodTypeStats)
+                            {
+                                <tr>
+                                    <td><span class="badge bg-danger">@stat.BloodType</span></td>
+                                    <td>@stat.DonorCount</td>
+                                    <td>@stat.TotalDonations</td>
+                                    <td>
+                                        @if (stat.RequestCount > 0)
+                                        {
+                                            <span class="badge bg-warning text-dark">@stat.RequestCount</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">0</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Donations</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.RecentDonations.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var donation in Model.RecentDonations)
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">@donation.Donor.User.FullName</h6>
+                                        <small class="text-muted">
+                                            <span class="badge bg-danger">@donation.Donor.BloodType.TypeName</span>
+                                            @donation.Quantity ml - @donation.DonationDate.ToString("MMM dd, yyyy")
+                                        </small>
+                                    </div>
+                                    <span class="status-badge status-@donation.Status.ToLower()">
+                                        @donation.Status
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center">No recent donations</p>
+                }
+                <div class="text-center mt-3">
+                    <a href="/Admin/Donations" class="btn btn-sm btn-outline-success">View All</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Blood Requests</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.RecentRequests.Any())
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var request in Model.RecentRequests)
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">@request.HospitalName</h6>
+                                        <small class="text-muted">
+                                            <span class="badge bg-danger">@request.BloodType.TypeName</span>
+                                            @request.Quantity ml - @request.RequestDate.ToString("MMM dd, yyyy")
+                                        </small>
+                                    </div>
+                                    <span class="status-badge status-@request.Status.ToLower()">
+                                        @request.Status
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center">No recent requests</p>
+                }
+                <div class="text-center mt-3">
+                    <a href="/Admin/BloodRequests" class="btn btn-sm btn-outline-warning">View All</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

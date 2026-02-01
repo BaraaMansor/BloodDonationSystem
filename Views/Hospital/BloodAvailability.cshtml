@@ -1,0 +1,137 @@
+@model List<BloodAvailabilityViewModel>
+@{
+    ViewData["Title"] = "Blood Availability";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-tint"></i> Blood Availability</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Hospital/Dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item active">Blood Availability</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <strong>Live Blood Stock:</strong> This shows the current available blood units and donors in our system.
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-database"></i> Current Blood Stock</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Blood Type</th>
+                                    <th>Description</th>
+                                    <th>Available Units</th>
+                                    <th>Total Quantity</th>
+                                    <th>Available Donors</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var blood in Model)
+                                {
+                                    <tr>
+                                        <td><h5><span class="badge bg-danger">@blood.BloodType</span></h5></td>
+                                        <td>@blood.Description</td>
+                                        <td><strong>@blood.AvailableUnits</strong> units</td>
+                                        <td><strong>@blood.TotalQuantity</strong> ml</td>
+                                        <td>
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-users"></i> @blood.AvailableDonors donors
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if (blood.AvailableUnits >= 10)
+                                            {
+                                                <span class="badge bg-success">Good Stock</span>
+                                            }
+                                            else if (blood.AvailableUnits >= 5)
+                                            {
+                                                <span class="badge bg-warning text-dark">Moderate</span>
+                                            }
+                                            else if (blood.AvailableUnits > 0)
+                                            {
+                                                <span class="badge bg-danger">Low Stock</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-dark">Out of Stock</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a href="/Hospital/CreateRequest" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-plus"></i> Request
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="table-light">
+                                <tr class="fw-bold">
+                                    <td colspan="2">Total</td>
+                                    <td>@Model.Sum(b => b.AvailableUnits) units</td>
+                                    <td>@Model.Sum(b => b.TotalQuantity) ml</td>
+                                    <td colspan="3">@Model.Sum(b => b.AvailableDonors) donors available</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                        <p class="text-muted">No blood stock available at this time</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blood Type Compatibility Info -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-book"></i> Blood Type Compatibility Guide</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-danger">Universal Donor:</h6>
+                        <p><span class="badge bg-danger">O-</span> can donate to anyone</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <h6 class="text-success">Universal Recipient:</h6>
+                        <p><span class="badge bg-danger">AB+</span> can receive from anyone</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="alert alert-warning mb-0">
+                    <i class="fas fa-lightbulb"></i>
+                    <strong>Tip:</strong> In emergencies, compatible blood types can be used. Consult with medical staff for specific requirements.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

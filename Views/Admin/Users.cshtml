@@ -1,0 +1,107 @@
+@model List<User>
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-users"></i> Manage Users</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Admin/Dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item active">Users</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-danger text-white">
+        <h5 class="mb-0"><i class="fas fa-list"></i> All Users (@Model.Count)</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Blood Type</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.Id</td>
+                            <td>
+                                <strong>@user.FullName</strong>
+                            </td>
+                            <td>@user.Email</td>
+                            <td>
+                                @if (user.Role == "Admin")
+                                {
+                                    <span class="badge bg-danger">@user.Role</span>
+                                }
+                                else if (user.Role == "Donor")
+                                {
+                                    <span class="badge bg-success">@user.Role</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info">@user.Role</span>
+                                }
+                            </td>
+                            <td>
+                                @if (user.Donor != null && user.Donor.BloodType != null)
+                                {
+                                    <span class="badge bg-danger">@user.Donor.BloodType.TypeName</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+                            <td>@(user.Phone ?? "N/A")</td>
+                            <td>
+                                @if (user.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactive</span>
+                                }
+                            </td>
+                            <td>@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="/Admin/UserDetails/@user.Id" class="btn btn-info" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    @if (user.Role != "Admin")
+                                    {
+                                        <form method="post" action="/Admin/ToggleUserStatus/@user.Id" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-@(user.IsActive ? "warning" : "success")" 
+                                                    title="@(user.IsActive ? "Deactivate" : "Activate")"
+                                                    onclick="return confirm('Are you sure you want to @(user.IsActive ? "deactivate" : "activate") this user?')">
+                                                <i class="fas fa-@(user.IsActive ? "ban" : "check")"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

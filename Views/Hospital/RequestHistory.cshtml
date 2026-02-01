@@ -1,0 +1,123 @@
+@model List<BloodRequest>
+@{
+    ViewData["Title"] = "Request History";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-history"></i> Request History</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Hospital/Dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item active">Request History</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <a href="/Hospital/CreateRequest" class="btn btn-danger">
+            <i class="fas fa-plus"></i> New Request
+        </a>
+        <a href="/Hospital/BloodAvailability" class="btn btn-success">
+            <i class="fas fa-tint"></i> Check Availability
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-list"></i> All Blood Requests</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Blood Type</th>
+                                    <th>Quantity</th>
+                                    <th>Status</th>
+                                    <th>Request Date</th>
+                                    <th>Notes</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var request in Model)
+                                {
+                                    <tr>
+                                        <td><strong>#@request.Id</strong></td>
+                                        <td><span class="badge bg-danger">@request.BloodType.TypeName</span></td>
+                                        <td>@request.Quantity ml</td>
+                                        <td>
+                                            @if (request.Status == "Fulfilled")
+                                            {
+                                                <span class="badge bg-success"><i class="fas fa-check-double"></i> Fulfilled</span>
+                                            }
+                                            else if (request.Status == "Approved")
+                                            {
+                                                <span class="badge bg-info"><i class="fas fa-check"></i> Approved</span>
+                                            }
+                                            else if (request.Status == "Pending")
+                                            {
+                                                <span class="badge bg-warning text-dark"><i class="fas fa-clock"></i> Pending</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger"><i class="fas fa-times"></i> Rejected</span>
+                                            }
+                                        </td>
+                                        <td>@request.RequestDate.ToString("MMM dd, yyyy HH:mm")</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(request.Notes))
+                                            {
+                                                <small>@(request.Notes.Length > 30 ? request.Notes.Substring(0, 30) + "..." : request.Notes)</small>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a href="/Hospital/RequestDetails/@request.Id" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-light fw-bold">
+                                    <td colspan="2">Summary</td>
+                                    <td>@Model.Sum(r => r.Quantity) ml</td>
+                                    <td colspan="1">
+                                        @Model.Count(r => r.Status == "Pending") Pending |
+                                        @Model.Count(r => r.Status == "Approved") Approved |
+                                        @Model.Count(r => r.Status == "Fulfilled") Fulfilled
+                                    </td>
+                                    <td colspan="3">Total: @Model.Count requests</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No blood requests yet</p>
+                        <a href="/Hospital/CreateRequest" class="btn btn-danger">
+                            <i class="fas fa-plus"></i> Create First Request
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

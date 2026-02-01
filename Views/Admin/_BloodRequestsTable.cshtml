@@ -1,0 +1,86 @@
+@model List<BloodRequest>
+
+<div class="card">
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Hospital</th>
+                            <th>Blood Type</th>
+                            <th>Quantity</th>
+                            <th>Request Date</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td>@request.Id</td>
+                                <td>
+                                    <strong>@request.HospitalName</strong>
+                                </td>
+                                <td><span class="badge bg-danger fs-6">@request.BloodType.TypeName</span></td>
+                                <td>@request.Quantity ml</td>
+                                <td>@request.RequestDate.ToString("MMM dd, yyyy")</td>
+                                <td><span class="status-badge status-@request.Status.ToLower()">@request.Status</span></td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(request.Notes))
+                                    {
+                                        <small>@request.Notes</small>
+                                    }
+                                    @if (!string.IsNullOrEmpty(request.AdminNotes))
+                                    {
+                                        <br><small class="text-muted"><strong>Admin:</strong> @request.AdminNotes</small>
+                                    }
+                                </td>
+                                <td>
+                                    @if (request.Status == "Pending")
+                                    {
+                                        <div class="btn-group btn-group-sm">
+                                            <form method="post" action="/Admin/ApproveRequest/@request.Id" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-success" title="Approve"
+                                                        onclick="return confirm('Are you sure you want to approve this request?')">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
+                                            <button type="button" class="btn btn-danger" title="Reject" 
+                                                    onclick="showRejectModal(@request.Id)">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    }
+                                    else if (request.Status == "Approved")
+                                    {
+                                        <form method="post" action="/Admin/FulfillRequest/@request.Id" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-info" title="Mark as Fulfilled"
+                                                    onclick="return confirm('Mark this request as fulfilled?')">
+                                                <i class="fas fa-check-double"></i> Fulfill
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-muted py-4">No blood requests found.</p>
+        }
+    </div>
+</div>

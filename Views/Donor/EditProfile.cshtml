@@ -1,0 +1,93 @@
+@model EditDonorProfileViewModel
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-edit"></i> Edit Profile</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Donor/Dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/Donor/Profile">Profile</a></li>
+                <li class="breadcrumb-item active">Edit</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="fas fa-user-edit"></i> Update Your Information</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="EditProfile" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <h5 class="mb-3"><i class="fas fa-id-card"></i> Basic Information</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="FullName" class="form-label"></label>
+                            <input asp-for="FullName" class="form-control" placeholder="Enter your full name" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Phone" class="form-label"></label>
+                            <input asp-for="Phone" class="form-control" placeholder="Enter phone number" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Gender" class="form-label"></label>
+                        <select asp-for="Gender" class="form-select">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label"></label>
+                        <textarea asp-for="Address" class="form-control" rows="2" placeholder="Enter your address"></textarea>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h5 class="mb-3"><i class="fas fa-notes-medical"></i> Medical Information</h5>
+
+                    <div class="mb-4">
+                        <label asp-for="MedicalNotes" class="form-label"></label>
+                        <textarea asp-for="MedicalNotes" class="form-control" rows="3" 
+                                  placeholder="Any medical conditions, allergies, or notes (optional)..."></textarea>
+                        <span asp-validation-for="MedicalNotes" class="text-danger"></span>
+                        <small class="form-text text-muted">This information helps ensure safe donation</small>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Note:</strong> You cannot change your blood type or date of birth. Contact admin if corrections are needed.
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <a href="/Donor/Profile" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

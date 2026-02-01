@@ -1,0 +1,265 @@
+@model DonorDashboardViewModel
+@{
+    ViewData["Title"] = "Donor Dashboard";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-tachometer-alt"></i> Donor Dashboard</h2>
+        <p class="text-muted">Welcome, @Model.Donor.User.FullName!</p>
+    </div>
+</div>
+
+<!-- Eligibility Alert -->
+@if (!Model.CanDonateAgain)
+{
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        <strong>Not Eligible:</strong> You must wait @Model.DaysUntilEligible more days before donating again (last donation: @Model.LastDonationDate?.ToString("MMM dd, yyyy")).
+    </div>
+}
+else
+{
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i>
+        <strong>Eligible to Donate!</strong> You can schedule a new donation now.
+        <a href="/Donor/CreateDonation" class="btn btn-sm btn-success ms-2">
+            <i class="fas fa-hand-holding-heart"></i> Donate Now
+        </a>
+    </div>
+}
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card donors">
+            <div class="card-body text-center">
+                <h5 class="text-muted"><i class="fas fa-tint"></i> Blood Type</h5>
+                <h2 class="mb-0 text-danger">@Model.Donor.BloodType.TypeName</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card donations">
+            <div class="card-body text-center">
+                <h5 class="text-muted"><i class="fas fa-hand-holding-heart"></i> Total Donations</h5>
+                <h2 class="mb-0">@Model.TotalDonations</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card requests">
+            <div class="card-body text-center">
+                <h5 class="text-muted"><i class="fas fa-check-circle"></i> Completed</h5>
+                <h2 class="mb-0">@Model.CompletedDonations</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card blood-types">
+            <div class="card-body text-center">
+                <h5 class="text-muted"><i class="fas fa-clock"></i> Pending</h5>
+                <h2 class="mb-0">@Model.PendingDonations</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @if (Model.CanDonateAgain)
+                    {
+                        <div class="col-md-3 mb-2">
+                            <a href="/Donor/CreateDonation" class="btn btn-success w-100">
+                                <i class="fas fa-hand-holding-heart"></i> Schedule Donation
+                            </a>
+                        </div>
+                    }
+                    <div class="col-md-3 mb-2">
+                        <a href="/Donor/DonationHistory" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-history"></i> Donation History
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="/Donor/Profile" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-user"></i> View Profile
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <form method="post" action="/Donor/ToggleAvailability" class="d-inline w-100">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-outline-warning w-100">
+                                <i class="fas fa-@(Model.Donor.IsAvailable ? "ban" : "check")"></i> 
+                                @(Model.Donor.IsAvailable ? "Mark Unavailable" : "Mark Available")
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Overview -->
+<div class="row mb-4">
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-user"></i> Profile Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Full Name:</strong></div>
+                    <div class="col-6">@Model.Donor.User.FullName</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Email:</strong></div>
+                    <div class="col-6">@Model.Donor.User.Email</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Phone:</strong></div>
+                    <div class="col-6">@(Model.Donor.User.Phone ?? "N/A")</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Blood Type:</strong></div>
+                    <div class="col-6"><span class="badge bg-danger">@Model.Donor.BloodType.TypeName</span></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Gender:</strong></div>
+                    <div class="col-6">@Model.Donor.Gender</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Age:</strong></div>
+                    <div class="col-6">@((DateTime.Now.Year - Model.Donor.DateOfBirth.Year)) years</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Availability:</strong></div>
+                    <div class="col-6">
+                        @if (Model.Donor.IsAvailable)
+                        {
+                            <span class="badge bg-success">Available</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Not Available</span>
+                        }
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="/Donor/EditProfile" class="btn btn-sm btn-danger">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-line"></i> Donation Stats</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <h6>Last Donation</h6>
+                        <p class="text-muted">
+                            @if (Model.LastDonationDate.HasValue)
+                            {
+                                @Model.LastDonationDate.Value.ToString("MMMM dd, yyyy")
+                                <br><small>(@((int)(DateTime.Now - Model.LastDonationDate.Value).TotalDays) days ago)</small>
+                            }
+                            else
+                            {
+                                <text>No donations yet</text>
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <h6>Next Eligible Date</h6>
+                        <p class="text-muted">
+                            @if (Model.LastDonationDate.HasValue)
+                            {
+                                @Model.LastDonationDate.Value.AddDays(56).ToString("MMMM dd, yyyy")
+                            }
+                            else
+                            {
+                                <text>Available now</text>
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Total Blood Donated</h6>
+                        <p class="text-muted">
+                            @{
+                                var totalQuantity = Model.Donor.Donations.Where(d => d.Status == "Completed").Sum(d => d.Quantity);
+                            }
+                            @totalQuantity ml
+                            @if (totalQuantity > 0)
+                            {
+                                <br><small>(@(totalQuantity / 1000.0) liters)</small>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Donations -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-history"></i> Recent Donation History</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.RecentDonations.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Quantity</th>
+                                    <th>Status</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var donation in Model.RecentDonations)
+                                {
+                                    <tr>
+                                        <td>@donation.DonationDate.ToString("MMM dd, yyyy")</td>
+                                        <td>@donation.Quantity ml</td>
+                                        <td><span class="status-badge status-@donation.Status.ToLower()">@donation.Status</span></td>
+                                        <td>@(donation.Notes ?? "-")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center">
+                        <a href="/Donor/DonationHistory" class="btn btn-sm btn-outline-info">View All History</a>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-center text-muted py-4">No donation history yet. Schedule your first donation!</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

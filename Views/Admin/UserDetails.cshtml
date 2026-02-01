@@ -1,0 +1,179 @@
+@model User
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-user"></i> User Details</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Admin/Dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/Admin/Users">Users</a></li>
+                <li class="breadcrumb-item active">@Model.FullName</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-id-card"></i> Basic Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Full Name:</strong><br>@Model.FullName</p>
+                <p><strong>Email:</strong><br>@Model.Email</p>
+                <p><strong>Phone:</strong><br>@(Model.Phone ?? "N/A")</p>
+                <p><strong>Role:</strong><br>
+                    @if (Model.Role == "Admin")
+                    {
+                        <span class="badge bg-danger">@Model.Role</span>
+                    }
+                    else if (Model.Role == "Donor")
+                    {
+                        <span class="badge bg-success">@Model.Role</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-info">@Model.Role</span>
+                    }
+                </p>
+                <p><strong>Status:</strong><br>
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactive</span>
+                    }
+                </p>
+                <p><strong>Member Since:</strong><br>@Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Donor != null)
+    {
+        <div class="col-md-8 mb-4">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-tint"></i> Donor Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Blood Type:</strong><br>
+                                <span class="badge bg-danger fs-5">@Model.Donor.BloodType.TypeName</span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Gender:</strong><br>@Model.Donor.Gender</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Date of Birth:</strong><br>@Model.Donor.DateOfBirth.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Age:</strong><br>@((DateTime.Now.Year - Model.Donor.DateOfBirth.Year)) years</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <p><strong>Address:</strong><br>@Model.Donor.Address</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Availability:</strong><br>
+                                @if (Model.Donor.IsAvailable)
+                                {
+                                    <span class="badge bg-success">Available</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">Not Available</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Last Donation:</strong><br>
+                                @if (Model.Donor.LastDonationDate.HasValue)
+                                {
+                                    @Model.Donor.LastDonationDate.Value.ToString("MMMM dd, yyyy")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Never</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Donor.MedicalNotes))
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <p><strong>Medical Notes:</strong><br>@Model.Donor.MedicalNotes</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @if (Model.Donor.Donations.Any())
+            {
+                <div class="card mt-3">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-history"></i> Donation History (@Model.Donor.Donations.Count)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Quantity</th>
+                                        <th>Status</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var donation in Model.Donor.Donations.OrderByDescending(d => d.DonationDate))
+                                    {
+                                        <tr>
+                                            <td>@donation.DonationDate.ToString("MMM dd, yyyy")</td>
+                                            <td>@donation.Quantity ml</td>
+                                            <td><span class="status-badge status-@donation.Status.ToLower()">@donation.Status</span></td>
+                                            <td>@(donation.Notes ?? "-")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <a href="/Admin/Users" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Users
+        </a>
+        @if (Model.Role != "Admin")
+        {
+            <form method="post" action="/Admin/ToggleUserStatus/@Model.Id" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-@(Model.IsActive ? "warning" : "success")" 
+                        onclick="return confirm('Are you sure you want to @(Model.IsActive ? "deactivate" : "activate") this user?')">
+                    <i class="fas fa-@(Model.IsActive ? "ban" : "check")"></i> @(Model.IsActive ? "Deactivate" : "Activate") User
+                </button>
+            </form>
+        }
+    </div>
+</div>

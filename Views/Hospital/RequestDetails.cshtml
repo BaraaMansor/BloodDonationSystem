@@ -1,0 +1,160 @@
+@model BloodRequest
+@{
+    ViewData["Title"] = "Request Details";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-file-alt"></i> Request Details</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Hospital/Dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/Hospital/RequestHistory">Request History</a></li>
+                <li class="breadcrumb-item active">Request #@Model.Id</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-info-circle"></i> Request #@Model.Id</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-muted">Blood Type</label>
+                        <p><span class="badge bg-danger fs-5">@Model.BloodType.TypeName</span></p>
+                        <small class="text-muted">@Model.BloodType.Description</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted">Status</label>
+                        <p>
+                            @if (Model.Status == "Fulfilled")
+                            {
+                                <span class="badge bg-success fs-6"><i class="fas fa-check-double"></i> Fulfilled</span>
+                            }
+                            else if (Model.Status == "Approved")
+                            {
+                                <span class="badge bg-info fs-6"><i class="fas fa-check"></i> Approved</span>
+                            }
+                            else if (Model.Status == "Pending")
+                            {
+                                <span class="badge bg-warning text-dark fs-6"><i class="fas fa-clock"></i> Pending</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger fs-6"><i class="fas fa-times"></i> Rejected</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-muted">Quantity Required</label>
+                        <p class="fw-bold">@Model.Quantity ml</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted">Hospital Name</label>
+                        <p class="fw-bold">@Model.HospitalName</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label class="text-muted">Request Date</label>
+                        <p class="fw-bold">@Model.RequestDate.ToString("MMMM dd, yyyy HH:mm")</p>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Notes))
+                {
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="text-muted">Notes / Special Requirements</label>
+                            <div class="alert alert-light">
+                                @Model.Notes
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.AdminNotes))
+                {
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="text-muted">Admin Response</label>
+                            <div class="alert alert-info">
+                                <i class="fas fa-user-shield"></i> @Model.AdminNotes
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <hr>
+
+                <div class="d-grid gap-2">
+                    <a href="/Hospital/RequestHistory" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to History
+                    </a>
+                    @if (Model.Status == "Pending" || Model.Status == "Approved")
+                    {
+                        <a href="/Hospital/BloodAvailability" class="btn btn-success">
+                            <i class="fas fa-tint"></i> Check Blood Availability
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Card -->
+        <div class="card shadow mt-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="fas fa-timeline"></i> Request Timeline</h5>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <i class="fas fa-plus-circle text-primary"></i>
+                        <strong>Request Submitted</strong>
+                        <p class="text-muted mb-0">@Model.RequestDate.ToString("MMM dd, yyyy HH:mm")</p>
+                    </div>
+                    @if (Model.Status != "Pending")
+                    {
+                        <div class="timeline-item">
+                            <i class="fas fa-@(Model.Status == "Rejected" ? "times-circle" : "check-circle") text-@(Model.Status == "Rejected" ? "danger" : "success")"></i>
+                            <strong>@Model.Status</strong>
+                            <p class="text-muted mb-0">Updated by Admin</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+    .timeline-item {
+        position: relative;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        border-left: 2px solid #dee2e6;
+    }
+    .timeline-item:last-child {
+        border-left: none;
+    }
+    .timeline-item i {
+        position: absolute;
+        left: -12px;
+        top: 0;
+        background: white;
+        padding: 2px;
+    }
+</style>

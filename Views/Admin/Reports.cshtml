@@ -1,0 +1,290 @@
+@model ReportsViewModel
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-chart-bar"></i> Reports & Analytics</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Admin/Dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item active">Reports</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-danger mb-0">@Model.TotalDonors</h3>
+                <small class="text-muted">Total Donors</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-success mb-0">@Model.ActiveDonors</h3>
+                <small class="text-muted">Active Donors</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-info mb-0">@Model.TotalDonations</h3>
+                <small class="text-muted">Total Donations</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-primary mb-0">@Model.CompletedDonations</h3>
+                <small class="text-muted">Completed</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-warning mb-0">@Model.TotalBloodRequests</h3>
+                <small class="text-muted">Total Requests</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-success mb-0">@Model.FulfilledRequests</h3>
+                <small class="text-muted">Fulfilled</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blood Type Distribution -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-tint"></i> Blood Type Distribution & Availability</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Blood Type</th>
+                                <th>Donors</th>
+                                <th>Completed Donations</th>
+                                <th>Total Quantity Collected (ml)</th>
+                                <th>Pending Requests</th>
+                                <th>Requested Quantity (ml)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var bt in Model.BloodTypeDistribution)
+                            {
+                                var availability = bt.TotalQuantity >= bt.RequestedQuantity ? "Available" : "Low Stock";
+                                var badgeClass = availability == "Available" ? "bg-success" : "bg-warning";
+                                
+                                <tr>
+                                    <td><span class="badge bg-danger fs-6">@bt.BloodType</span></td>
+                                    <td>@bt.DonorCount</td>
+                                    <td>@bt.CompletedDonations</td>
+                                    <td><strong>@bt.TotalQuantity.ToString("N0")</strong></td>
+                                    <td>
+                                        @if (bt.PendingRequests > 0)
+                                        {
+                                            <span class="badge bg-warning text-dark">@bt.PendingRequests</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">0</span>
+                                        }
+                                    </td>
+                                    <td>@bt.RequestedQuantity.ToString("N0")</td>
+                                    <td><span class="badge @badgeClass">@availability</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-active">
+                                <td><strong>TOTAL</strong></td>
+                                <td><strong>@Model.BloodTypeDistribution.Sum(b => b.DonorCount)</strong></td>
+                                <td><strong>@Model.BloodTypeDistribution.Sum(b => b.CompletedDonations)</strong></td>
+                                <td><strong>@Model.BloodTypeDistribution.Sum(b => b.TotalQuantity).ToString("N0")</strong></td>
+                                <td><strong>@Model.BloodTypeDistribution.Sum(b => b.PendingRequests)</strong></td>
+                                <td><strong>@Model.BloodTypeDistribution.Sum(b => b.RequestedQuantity).ToString("N0")</strong></td>
+                                <td>-</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Monthly Donations -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-calendar-alt"></i> Monthly Donation Statistics (Last 12 Months)</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.MonthlyDonations.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Number of Donations</th>
+                                    <th>Total Quantity (ml)</th>
+                                    <th>Average per Donation (ml)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var month in Model.MonthlyDonations)
+                                {
+                                    var average = month.Count > 0 ? (month.TotalQuantity / month.Count) : 0;
+                                    <tr>
+                                        <td><strong>@month.Month</strong></td>
+                                        <td>@month.Count</td>
+                                        <td>@month.TotalQuantity.ToString("N0")</td>
+                                        <td>@average.ToString("N0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr class="table-active">
+                                    <td><strong>TOTAL</strong></td>
+                                    <td><strong>@Model.MonthlyDonations.Sum(m => m.Count)</strong></td>
+                                    <td><strong>@Model.MonthlyDonations.Sum(m => m.TotalQuantity).ToString("N0")</strong></td>
+                                    <td><strong>@((Model.MonthlyDonations.Sum(m => m.Count) > 0 ? Model.MonthlyDonations.Sum(m => m.TotalQuantity) / Model.MonthlyDonations.Sum(m => m.Count) : 0).ToString("N0"))</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-center text-muted py-4">No donation data available yet.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Insights -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Key Insights</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success"></i>
+                        <strong>Donation Rate:</strong> 
+                        @{
+                            var rate = Model.TotalDonors > 0 ? (double)Model.CompletedDonations / Model.TotalDonors : 0;
+                        }
+                        @rate.ToString("F2") donations per donor
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success"></i>
+                        <strong>Request Fulfillment Rate:</strong>
+                        @{
+                            var fulfillmentRate = Model.TotalBloodRequests > 0 ? (double)Model.FulfilledRequests / Model.TotalBloodRequests * 100 : 0;
+                        }
+                        @fulfillmentRate.ToString("F1")%
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check-circle text-success"></i>
+                        <strong>Most Common Blood Type:</strong>
+                        @{
+                            var mostCommon = Model.BloodTypeDistribution.OrderByDescending(b => b.DonorCount).FirstOrDefault();
+                        }
+                        @if (mostCommon != null)
+                        {
+                            <span class="badge bg-danger">@mostCommon.BloodType</span>
+                            <text> (@mostCommon.DonorCount donors)</text>
+                        }
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-exclamation-triangle text-warning"></i>
+                        <strong>Blood Types in High Demand:</strong>
+                        @{
+                            var highDemand = Model.BloodTypeDistribution.Where(b => b.PendingRequests > 0).OrderByDescending(b => b.PendingRequests).Take(3).ToList();
+                        }
+                        @if (highDemand.Any())
+                        {
+                            foreach (var bt in highDemand)
+                            {
+                                <span class="badge bg-warning text-dark">@bt.BloodType (@bt.PendingRequests)</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted">None</span>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-exclamation-circle"></i> Recommendations</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    @{
+                        var lowStock = Model.BloodTypeDistribution.Where(b => b.TotalQuantity < b.RequestedQuantity).ToList();
+                    }
+                    @if (lowStock.Any())
+                    {
+                        <li class="mb-2">
+                            <i class="fas fa-exclamation-triangle text-danger"></i>
+                            <strong>Low Stock Alert:</strong> Focus on recruiting donors for 
+                            @foreach (var bt in lowStock)
+                            {
+                                <span class="badge bg-danger">@bt.BloodType</span>
+                            }
+                        </li>
+                    }
+                    @if (Model.ActiveDonors < Model.TotalDonors * 0.5)
+                    {
+                        <li class="mb-2">
+                            <i class="fas fa-users text-warning"></i>
+                            <strong>Low Active Donors:</strong> Consider running donor engagement campaigns
+                        </li>
+                    }
+                    @if (Model.TotalDonations > 0 && Model.CompletedDonations < Model.TotalDonations * 0.7)
+                    {
+                        <li class="mb-2">
+                            <i class="fas fa-clock text-info"></i>
+                            <strong>Pending Donations:</strong> Review and process pending donation requests
+                        </li>
+                    }
+                    <li class="mb-2">
+                        <i class="fas fa-chart-line text-success"></i>
+                        <strong>Growth Opportunity:</strong> Target blood types with low donor counts
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

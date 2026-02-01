@@ -1,0 +1,160 @@
+@model Donor
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-user"></i> My Profile</h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Donor/Dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item active">Profile</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-user-circle fa-5x text-danger"></i>
+                </div>
+                <h4>@Model.User.FullName</h4>
+                <p class="text-muted mb-3">@Model.User.Email</p>
+                <span class="badge bg-danger fs-5 mb-3">Blood Type: @Model.BloodType.TypeName</span>
+                <br>
+                @if (Model.IsAvailable)
+                {
+                    <span class="badge bg-success">Available for Donation</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark">Not Available</span>
+                }
+                <hr>
+                <div class="d-grid">
+                    <a href="/Donor/EditProfile" class="btn btn-danger">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle"></i> Personal Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-muted">Full Name</label>
+                        <p class="fw-bold">@Model.User.FullName</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted">Email</label>
+                        <p class="fw-bold">@Model.User.Email</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-muted">Phone</label>
+                        <p class="fw-bold">@(Model.User.Phone ?? "Not provided")</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted">Gender</label>
+                        <p class="fw-bold">@Model.Gender</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-muted">Date of Birth</label>
+                        <p class="fw-bold">@Model.DateOfBirth.ToString("MMMM dd, yyyy")</p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted">Age</label>
+                        <p class="fw-bold">@((DateTime.Now.Year - Model.DateOfBirth.Year)) years</p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <label class="text-muted">Address</label>
+                        <p class="fw-bold">@Model.Address</p>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.MedicalNotes))
+                {
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="text-muted">Medical Notes</label>
+                            <p class="fw-bold">@Model.MedicalNotes</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="card shadow mt-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-tint"></i> Blood Donation Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-muted">Blood Type</label>
+                        <p><span class="badge bg-danger fs-5">@Model.BloodType.TypeName</span></p>
+                        <small class="text-muted">@Model.BloodType.Description</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted">Availability Status</label>
+                        <p>
+                            @if (Model.IsAvailable)
+                            {
+                                <span class="badge bg-success">Available</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Not Available</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="text-muted">Last Donation Date</label>
+                        <p class="fw-bold">
+                            @if (Model.LastDonationDate.HasValue)
+                            {
+                                @Model.LastDonationDate.Value.ToString("MMMM dd, yyyy")
+                            }
+                            else
+                            {
+                                <span class="text-muted">No donations yet</span>
+                            }
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-muted">Total Donations</label>
+                        <p class="fw-bold">@Model.Donations.Count donations</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <label class="text-muted">Member Since</label>
+                        <p class="fw-bold">@Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

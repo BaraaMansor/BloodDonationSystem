@@ -1,0 +1,78 @@
+@model List<Donation>
+
+<div class="card">
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Donor</th>
+                            <th>Blood Type</th>
+                            <th>Date</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var donation in Model)
+                        {
+                            <tr>
+                                <td>@donation.Id</td>
+                                <td>
+                                    <strong>@donation.Donor.User.FullName</strong><br>
+                                    <small class="text-muted">@donation.Donor.User.Email</small>
+                                </td>
+                                <td><span class="badge bg-danger">@donation.Donor.BloodType.TypeName</span></td>
+                                <td>@donation.DonationDate.ToString("MMM dd, yyyy")</td>
+                                <td>@donation.Quantity ml</td>
+                                <td><span class="status-badge status-@donation.Status.ToLower()">@donation.Status</span></td>
+                                <td>@(donation.Notes ?? "-")</td>
+                                <td>
+                                    @if (donation.Status == "Pending")
+                                    {
+                                        <div class="btn-group btn-group-sm">
+                                            <form method="post" action="/Admin/ApproveDonation/@donation.Id" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-success" title="Approve"
+                                                        onclick="return confirm('Are you sure you want to approve this donation?')">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
+                                            <button type="button" class="btn btn-danger" title="Reject" 
+                                                    onclick="showRejectModal(@donation.Id)">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    }
+                                    else if (donation.Status == "Approved")
+                                    {
+                                        <form method="post" action="/Admin/CompleteDonation/@donation.Id" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-info" title="Mark as Completed"
+                                                    onclick="return confirm('Mark this donation as completed?')">
+                                                <i class="fas fa-check-double"></i> Complete
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-muted py-4">No donations found.</p>
+        }
+    </div>
+</div>

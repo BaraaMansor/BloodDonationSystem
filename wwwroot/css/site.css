@@ -1,0 +1,104 @@
+/* Main site styles */
+html {
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
+
+/* Custom styles for Blood Donation System */
+.card-custom {
+  transition: transform 0.2s;
+  border-radius: 10px;
+}
+
+.card-custom:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.blood-type-badge {
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+}
+
+.stat-card {
+  border-left: 4px solid;
+  padding: 1.5rem;
+}
+
+.stat-card.donors {
+  border-left-color: #dc3545;
+}
+
+.stat-card.donations {
+  border-left-color: #28a745;
+}
+
+.stat-card.requests {
+  border-left-color: #ffc107;
+}
+
+.stat-card.blood-types {
+  border-left-color: #17a2b8;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  padding: 4rem 0;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.btn-donate {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 25px;
+}
+
+.btn-donate:hover {
+  background-color: #c82333;
+  color: white;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}
+
+.status-pending {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.status-approved {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.status-rejected {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.status-completed {
+  background-color: #17a2b8;
+  color: #fff;
+}

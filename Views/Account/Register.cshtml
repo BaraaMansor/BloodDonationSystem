@@ -1,0 +1,140 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white">
+                <h3 class="mb-0"><i class="fas fa-user-plus"></i> Register New Account</h3>
+            </div>
+            <div class="card-body">
+                <form asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                    <!-- Role Selection -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Register As:</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="Role" id="roleDonor" value="Donor" checked>
+                            <label class="btn btn-outline-danger" for="roleDonor">
+                                <i class="fas fa-hand-holding-heart"></i> Blood Donor
+                            </label>
+
+                            <input type="radio" class="btn-check" name="Role" id="roleHospital" value="Hospital">
+                            <label class="btn btn-outline-danger" for="roleHospital">
+                                <i class="fas fa-hospital"></i> Hospital
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Basic Information -->
+                    <h5 class="mb-3"><i class="fas fa-user"></i> Basic Information</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="FullName" class="form-label"></label>
+                            <input asp-for="FullName" class="form-control" placeholder="Enter full name" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" placeholder="Enter email address" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-control" placeholder="Enter password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="ConfirmPassword" class="form-label"></label>
+                            <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm password" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Phone" class="form-label"></label>
+                        <input asp-for="Phone" class="form-control" placeholder="Enter phone number" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <!-- Donor-Specific Fields -->
+                    <div id="donorFields">
+                        <hr class="my-4">
+                        <h5 class="mb-3"><i class="fas fa-tint"></i> Donor Information</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="BloodTypeId" class="form-label">Blood Type</label>
+                                <select asp-for="BloodTypeId" class="form-select">
+                                    <option value="">Select Blood Type</option>
+                                    @foreach (var bloodType in (ViewBag.BloodTypes as List<BloodType>)!)
+                                    {
+                                        <option value="@bloodType.Id">@bloodType.TypeName - @bloodType.Description</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="BloodTypeId" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                                <input asp-for="DateOfBirth" class="form-control" type="date" />
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Gender" class="form-label">Gender</label>
+                                <select asp-for="Gender" class="form-select">
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Address" class="form-label">Address</label>
+                                <input asp-for="Address" class="form-control" placeholder="Enter address" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-user-plus"></i> Register
+                        </button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+                <p class="text-center mb-0">
+                    Already have an account? <a href="/Account/Login">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Show/hide donor fields based on role selection
+            function toggleDonorFields() {
+                if ($('#roleDonor').is(':checked')) {
+                    $('#donorFields').show();
+                } else {
+                    $('#donorFields').hide();
+                }
+            }
+
+            $('input[name="Role"]').change(toggleDonorFields);
+            toggleDonorFields(); // Initial state
+        });
+    </script>
+}
