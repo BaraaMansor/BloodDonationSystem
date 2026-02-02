@@ -82,7 +82,9 @@
                                 <th>Blood Type</th>
                                 <th>Donors</th>
                                 <th>Completed Donations</th>
-                                <th>Total Quantity Collected (ml)</th>
+                                <th>Total Collected (ml)</th>
+                                <th>Fulfilled Requests (ml)</th>
+                                <th>Available Now (ml)</th>
                                 <th>Pending Requests</th>
                                 <th>Requested Quantity (ml)</th>
                                 <th>Status</th>
@@ -91,14 +93,16 @@
                         <tbody>
                             @foreach (var bt in Model.BloodTypeDistribution)
                             {
-                                var availability = bt.TotalQuantity >= bt.RequestedQuantity ? "Available" : "Low Stock";
-                                var badgeClass = availability == "Available" ? "bg-success" : "bg-warning";
+                                var availability = bt.AvailableQuantity == 0 ? "Out of Stock" : bt.AvailableQuantity >= bt.RequestedQuantity ? "Sufficient" : "Low Stock";
+                                var badgeClass = bt.AvailableQuantity == 0 ? "bg-danger" : bt.AvailableQuantity >= bt.RequestedQuantity ? "bg-success" : "bg-warning text-dark";
                                 
                                 <tr>
                                     <td><span class="badge bg-danger fs-6">@bt.BloodType</span></td>
                                     <td>@bt.DonorCount</td>
                                     <td>@bt.CompletedDonations</td>
                                     <td><strong>@bt.TotalQuantity.ToString("N0")</strong></td>
+                                    <td class="text-danger">-@bt.FulfilledQuantity.ToString("N0")</td>
+                                    <td><strong class="text-success">@bt.AvailableQuantity.ToString("N0")</strong></td>
                                     <td>
                                         @if (bt.PendingRequests > 0)
                                         {
@@ -120,6 +124,8 @@
                                 <td><strong>@Model.BloodTypeDistribution.Sum(b => b.DonorCount)</strong></td>
                                 <td><strong>@Model.BloodTypeDistribution.Sum(b => b.CompletedDonations)</strong></td>
                                 <td><strong>@Model.BloodTypeDistribution.Sum(b => b.TotalQuantity).ToString("N0")</strong></td>
+                                <td class="text-danger"><strong>-@Model.BloodTypeDistribution.Sum(b => b.FulfilledQuantity).ToString("N0")</strong></td>
+                                <td><strong class="text-success">@Model.BloodTypeDistribution.Sum(b => b.AvailableQuantity).ToString("N0")</strong></td>
                                 <td><strong>@Model.BloodTypeDistribution.Sum(b => b.PendingRequests)</strong></td>
                                 <td><strong>@Model.BloodTypeDistribution.Sum(b => b.RequestedQuantity).ToString("N0")</strong></td>
                                 <td>-</td>
@@ -179,111 +185,6 @@
                 {
                     <p class="text-center text-muted py-4">No donation data available yet.</p>
                 }
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Key Insights -->
-<div class="row">
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Key Insights</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled">
-                    <li class="mb-2">
-                        <i class="fas fa-check-circle text-success"></i>
-                        <strong>Donation Rate:</strong> 
-                        @{
-                            var rate = Model.TotalDonors > 0 ? (double)Model.CompletedDonations / Model.TotalDonors : 0;
-                        }
-                        @rate.ToString("F2") donations per donor
-                    </li>
-                    <li class="mb-2">
-                        <i class="fas fa-check-circle text-success"></i>
-                        <strong>Request Fulfillment Rate:</strong>
-                        @{
-                            var fulfillmentRate = Model.TotalBloodRequests > 0 ? (double)Model.FulfilledRequests / Model.TotalBloodRequests * 100 : 0;
-                        }
-                        @fulfillmentRate.ToString("F1")%
-                    </li>
-                    <li class="mb-2">
-                        <i class="fas fa-check-circle text-success"></i>
-                        <strong>Most Common Blood Type:</strong>
-                        @{
-                            var mostCommon = Model.BloodTypeDistribution.OrderByDescending(b => b.DonorCount).FirstOrDefault();
-                        }
-                        @if (mostCommon != null)
-                        {
-                            <span class="badge bg-danger">@mostCommon.BloodType</span>
-                            <text> (@mostCommon.DonorCount donors)</text>
-                        }
-                    </li>
-                    <li class="mb-2">
-                        <i class="fas fa-exclamation-triangle text-warning"></i>
-                        <strong>Blood Types in High Demand:</strong>
-                        @{
-                            var highDemand = Model.BloodTypeDistribution.Where(b => b.PendingRequests > 0).OrderByDescending(b => b.PendingRequests).Take(3).ToList();
-                        }
-                        @if (highDemand.Any())
-                        {
-                            foreach (var bt in highDemand)
-                            {
-                                <span class="badge bg-warning text-dark">@bt.BloodType (@bt.PendingRequests)</span>
-                            }
-                        }
-                        else
-                        {
-                            <span class="text-muted">None</span>
-                        }
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6 mb-4">
-        <div class="card h-100">
-            <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0"><i class="fas fa-exclamation-circle"></i> Recommendations</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled">
-                    @{
-                        var lowStock = Model.BloodTypeDistribution.Where(b => b.TotalQuantity < b.RequestedQuantity).ToList();
-                    }
-                    @if (lowStock.Any())
-                    {
-                        <li class="mb-2">
-                            <i class="fas fa-exclamation-triangle text-danger"></i>
-                            <strong>Low Stock Alert:</strong> Focus on recruiting donors for 
-                            @foreach (var bt in lowStock)
-                            {
-                                <span class="badge bg-danger">@bt.BloodType</span>
-                            }
-                        </li>
-                    }
-                    @if (Model.ActiveDonors < Model.TotalDonors * 0.5)
-                    {
-                        <li class="mb-2">
-                            <i class="fas fa-users text-warning"></i>
-                            <strong>Low Active Donors:</strong> Consider running donor engagement campaigns
-                        </li>
-                    }
-                    @if (Model.TotalDonations > 0 && Model.CompletedDonations < Model.TotalDonations * 0.7)
-                    {
-                        <li class="mb-2">
-                            <i class="fas fa-clock text-info"></i>
-                            <strong>Pending Donations:</strong> Review and process pending donation requests
-                        </li>
-                    }
-                    <li class="mb-2">
-                        <i class="fas fa-chart-line text-success"></i>
-                        <strong>Growth Opportunity:</strong> Target blood types with low donor counts
-                    </li>
-                </ul>
             </div>
         </div>
     </div>

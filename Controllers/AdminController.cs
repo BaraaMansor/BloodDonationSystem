@@ -241,17 +241,37 @@ namespace BloodDonationSystem.Controllers
         [HttpPost]
         public IActionResult FulfillRequest(int id)
         {
-            var request = _context.BloodRequests.Find(id);
+            var request = _context.BloodRequests
+                .Include(r => r.BloodType)
+                .FirstOrDefault(r => r.Id == id);
+                
             if (request == null)
             {
                 TempData["ErrorMessage"] = "Request not found.";
                 return RedirectToAction("BloodRequests");
             }
 
+            // Check if there's enough blood available
+            var totalDonated = _context.Donations
+                .Where(d => d.Donor.BloodTypeId == request.BloodTypeId && d.Status == "Completed")
+                .Sum(d => d.Quantity);
+
+            var totalFulfilled = _context.BloodRequests
+                .Where(r => r.BloodTypeId == request.BloodTypeId && r.Status == "Fulfilled")
+                .Sum(r => r.Quantity);
+
+            var availableQuantity = totalDonated - totalFulfilled;
+
+            if (availableQuantity < request.Quantity)
+            {
+                TempData["ErrorMessage"] = $"Insufficient blood! Available: {availableQuantity}ml, Requested: {request.Quantity}ml. Need {request.Quantity - availableQuantity}ml more.";
+                return RedirectToAction("BloodRequests");
+            }
+
             request.Status = "Fulfilled";
             _context.SaveChanges();
 
-            TempData["SuccessMessage"] = "Blood request marked as fulfilled.";
+            TempData["SuccessMessage"] = $"Blood request fulfilled successfully. Remaining {request.BloodType.TypeName}: {availableQuantity - request.Quantity}ml";
             return RedirectToAction("BloodRequests");
         }
 
@@ -273,17 +293,26 @@ namespace BloodDonationSystem.Controllers
                         DonorCount = bt.Donors.Count(),
                         CompletedDonations = bt.Donors.SelectMany(d => d.Donations).Count(d => d.Status == "Completed"),
                         TotalQuantity = bt.Donors.SelectMany(d => d.Donations).Where(d => d.Status == "Completed").Sum(d => d.Quantity),
+                        FulfilledQuantity = bt.BloodRequests.Where(r => r.Status == "Fulfilled").Sum(r => r.Quantity),
                         PendingRequests = bt.BloodRequests.Count(r => r.Status == "Pending"),
                         RequestedQuantity = bt.BloodRequests.Where(r => r.Status == "Pending").Sum(r => r.Quantity)
                     }).ToList(),
                 MonthlyDonations = _context.Donations
                     .Where(d => d.Status == "Completed")
                     .GroupBy(d => new { d.DonationDate.Year, d.DonationDate.Month })
-                    .Select(g => new MonthlyStatViewModel
+                    .Select(g => new
                     {
-                        Month = $"{g.Key.Year}-{g.Key.Month:D2}",
+                        Year = g.Key.Year,
+                        Month = g.Key.Month,
                         Count = g.Count(),
                         TotalQuantity = g.Sum(d => d.Quantity)
+                    })
+                    .ToList()
+                    .Select(g => new MonthlyStatViewModel
+                    {
+                        Month = $"{g.Year}-{g.Month:D2}",
+                        Count = g.Count,
+                        TotalQuantity = g.TotalQuantity
                     })
                     .OrderByDescending(m => m.Month)
                     .Take(12)
@@ -336,6 +365,8 @@ namespace BloodDonationSystem.Controllers
         public int DonorCount { get; set; }
         public int CompletedDonations { get; set; }
         public int TotalQuantity { get; set; }
+        public int FulfilledQuantity { get; set; }
+        public int AvailableQuantity => TotalQuantity - FulfilledQuantity;
         public int PendingRequests { get; set; }
         public int RequestedQuantity { get; set; }
     }

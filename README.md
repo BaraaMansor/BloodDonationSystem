@@ -12,7 +12,7 @@ A comprehensive ASP.NET MVC application for managing blood donation activities b
 
 ## Technologies Used
 
-- ASP.NET Core 6.0 MVC
+- ASP.NET Core 8.0 MVC
 - Entity Framework Core
 - SQL Server (LocalDB)
 - Bootstrap 5
@@ -22,7 +22,7 @@ A comprehensive ASP.NET MVC application for managing blood donation activities b
 
 ### Prerequisites
 
-- .NET 6.0 SDK or later
+- .NET 8.0 SDK or later
 - SQL Server LocalDB
 - Visual Studio 2022 or VS Code
 
@@ -65,7 +65,3 @@ After seeding the database, you can login with:
 - **Admin:** admin@bloodbank.com / Admin123!
 - **Test Donor:** donor@test.com / Donor123!
 - **Test Hospital:** hospital@test.com / Hospital123!
-
-## License
-
-This project is for educational purposes.

@@ -247,6 +247,19 @@ namespace BloodDonationSystem.Controllers
                 return RedirectToAction("Dashboard");
             }
 
+            // If trying to mark as available, check eligibility
+            if (!donor.IsAvailable)
+            {
+                var canDonate = !donor.LastDonationDate.HasValue || 
+                               (DateTime.Now - donor.LastDonationDate.Value).TotalDays >= 56;
+                
+                if (!canDonate)
+                {
+                    var daysUntilEligible = 56 - (int)(DateTime.Now - donor.LastDonationDate!.Value).TotalDays;
+                    return RedirectToAction("Dashboard");
+                }
+            }
+
             donor.IsAvailable = !donor.IsAvailable;
             _context.SaveChanges();
 
