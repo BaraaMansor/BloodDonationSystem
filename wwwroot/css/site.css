@@ -39,20 +39,8 @@ body {
   padding: 1.5rem;
 }
 
-.stat-card.donors {
+.stat-card.b-danger {
   border-left-color: #dc3545;
-}
-
-.stat-card.donations {
-  border-left-color: #28a745;
-}
-
-.stat-card.requests {
-  border-left-color: #ffc107;
-}
-
-.stat-card.blood-types {
-  border-left-color: #17a2b8;
 }
 
 .hero-section {

@@ -82,14 +82,14 @@
                             <td>@user.CreatedAt.ToString("MMM dd, yyyy")</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <a href="/Admin/UserDetails/@user.Id" class="btn btn-info" title="View Details">
+                                    <a href="/Admin/UserDetails/@user.Id" class="btn btn-sm me-1 btn-info" title="View Details">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     @if (user.Role != "Admin")
                                     {
                                         <form method="post" action="/Admin/ToggleUserStatus/@user.Id" class="d-inline">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-@(user.IsActive ? "warning" : "success")" 
+                                            <button type="submit" class="btn btn-sm btn-@(user.IsActive ? "warning" : "success")" 
                                                     title="@(user.IsActive ? "Deactivate" : "Activate")"
                                                     onclick="return confirm('Are you sure you want to @(user.IsActive ? "deactivate" : "activate") this user?')">
                                                 <i class="fas fa-@(user.IsActive ? "ban" : "check")"></i>

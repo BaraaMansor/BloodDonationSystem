@@ -4,16 +4,19 @@ using BloodDonationSystem.Data;
 using BloodDonationSystem.Models;
 using BloodDonationSystem.Attributes;
 using BloodDonationSystem.Helpers;
+using BloodDonationSystem.Services;
 
 namespace BloodDonationSystem.Controllers;
     [AuthorizeRole("Admin")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ExcelExportService _excelService;
 
-        public AdminController(ApplicationDbContext context)
+        public AdminController(ApplicationDbContext context, ExcelExportService excelService)
         {
             _context = context;
+            _excelService = excelService;
         }
 
         // Dashboard
@@ -21,7 +24,8 @@ namespace BloodDonationSystem.Controllers;
         {
             var model = new AdminDashboardViewModel
             {
-                TotalDonors = _context.Donors.Count(),
+                TotalBloodStock = _context.Donations.Where(d => d.Status == "Completed").Sum(d => d.Quantity) - 
+                                  _context.BloodRequests.Where(r => r.Status == "Fulfilled").Sum(r => r.Quantity),
                 TotalDonations = _context.Donations.Count(),
                 PendingDonations = _context.Donations.Count(d => d.Status == "Pending"),
                 ApprovedDonations = _context.Donations.Count(d => d.Status == "Approved"),
@@ -35,6 +39,7 @@ namespace BloodDonationSystem.Controllers;
                         BloodType = bt.TypeName,
                         DonorCount = bt.Donors.Count(),
                         TotalDonations = bt.Donors.SelectMany(d => d.Donations).Count(d => d.Status == "Completed"),
+                        PendingDonations = bt.Donors.SelectMany(d => d.Donations).Count(d => d.Status == "Pending"),
                         RequestCount = bt.BloodRequests.Count(r => r.Status == "Pending")
                     }).ToList(),
                 RecentDonations = _context.Donations
@@ -293,8 +298,8 @@ namespace BloodDonationSystem.Controllers;
                         CompletedDonations = bt.Donors.SelectMany(d => d.Donations).Count(d => d.Status == "Completed"),
                         TotalQuantity = bt.Donors.SelectMany(d => d.Donations).Where(d => d.Status == "Completed").Sum(d => d.Quantity),
                         FulfilledQuantity = bt.BloodRequests.Where(r => r.Status == "Fulfilled").Sum(r => r.Quantity),
-                        PendingRequests = bt.BloodRequests.Count(r => r.Status == "Pending"),
-                        RequestedQuantity = bt.BloodRequests.Where(r => r.Status == "Pending").Sum(r => r.Quantity)
+                        PendingRequests = bt.BloodRequests.Count(r => r.Status == "Pending" || r.Status == "Approved"),
+                        RequestedQuantity = bt.BloodRequests.Where(r => r.Status == "Pending" || r.Status == "Approved").Sum(r => r.Quantity)
                     }).ToList(),
                 MonthlyDonations = _context.Donations
                     .Where(d => d.Status == "Completed")
@@ -320,12 +325,59 @@ namespace BloodDonationSystem.Controllers;
 
             return View(model);
         }
+
+        public IActionResult ExportReports()
+        {
+            var model = new ReportsViewModel
+            {
+                TotalDonors = _context.Donors.Count(),
+                ActiveDonors = _context.Donors.Count(d => d.IsAvailable),
+                TotalDonations = _context.Donations.Count(),
+                CompletedDonations = _context.Donations.Count(d => d.Status == "Completed"),
+                TotalBloodRequests = _context.BloodRequests.Count(),
+                FulfilledRequests = _context.BloodRequests.Count(r => r.Status == "Fulfilled"),
+                BloodTypeDistribution = _context.BloodTypes
+                    .Select(bt => new BloodTypeDistributionViewModel
+                    {
+                        BloodType = bt.TypeName,
+                        DonorCount = bt.Donors.Count(),
+                        CompletedDonations = bt.Donors.SelectMany(d => d.Donations).Count(d => d.Status == "Completed"),
+                        TotalQuantity = bt.Donors.SelectMany(d => d.Donations).Where(d => d.Status == "Completed").Sum(d => d.Quantity),
+                        FulfilledQuantity = bt.BloodRequests.Where(r => r.Status == "Fulfilled").Sum(r => r.Quantity),
+                        PendingRequests = bt.BloodRequests.Count(r => r.Status == "Pending" || r.Status == "Approved"),
+                        RequestedQuantity = bt.BloodRequests.Where(r => r.Status == "Pending" || r.Status == "Approved").Sum(r => r.Quantity)
+                    }).ToList(),
+                MonthlyDonations = _context.Donations
+                    .Where(d => d.Status == "Completed")
+                    .GroupBy(d => new { d.DonationDate.Year, d.DonationDate.Month })
+                    .Select(g => new
+                    {
+                        Year = g.Key.Year,
+                        Month = g.Key.Month,
+                        Count = g.Count(),
+                        TotalQuantity = g.Sum(d => d.Quantity)
+                    })
+                    .ToList()
+                    .Select(g => new MonthlyStatViewModel
+                    {
+                        Month = $"{g.Year}-{g.Month:D2}",
+                        Count = g.Count,
+                        TotalQuantity = g.TotalQuantity
+                    })
+                    .OrderByDescending(m => m.Month)
+                    .Take(12)
+                    .ToList()
+            };
+
+            var excelData = _excelService.GenerateReportsExcel(model);
+            return File(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"BloodDonationReports_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
+        }
     }
 
     // View Models
     public class AdminDashboardViewModel
     {
-        public int TotalDonors { get; set; }
+        public int TotalBloodStock { get; set; }
         public int TotalDonations { get; set; }
         public int PendingDonations { get; set; }
         public int ApprovedDonations { get; set; }
@@ -343,6 +395,7 @@ namespace BloodDonationSystem.Controllers;
         public string BloodType { get; set; } = string.Empty;
         public int DonorCount { get; set; }
         public int TotalDonations { get; set; }
+        public int PendingDonations { get; set; }
         public int RequestCount { get; set; }
     }
 

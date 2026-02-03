@@ -35,15 +35,15 @@
                                 <td>
                                     @if (donation.Status == "Pending")
                                     {
-                                        <div class="btn-group btn-group-sm">
+                                        <div>
                                             <form method="post" action="/Admin/ApproveDonation/@donation.Id" class="d-inline">
                                                 @Html.AntiForgeryToken()
-                                                <button type="submit" class="btn btn-success" title="Approve"
+                                                <button type="submit" class="btn btn-sm btn-success me-1" title="Approve"
                                                         onclick="return confirm('Are you sure you want to approve this donation?')">
                                                     <i class="fas fa-check"></i>
                                                 </button>
                                             </form>
-                                            <button type="button" class="btn btn-danger" title="Reject" 
+                                            <button type="button" class="btn btn-sm btn-danger" title="Reject" 
                                                     onclick="showRejectModal(@donation.Id)">
                                                 <i class="fas fa-times"></i>
                                             </button>

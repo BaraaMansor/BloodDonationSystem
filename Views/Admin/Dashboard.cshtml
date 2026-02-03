@@ -13,15 +13,16 @@
 <!-- Statistics Cards -->
 <div class="row mb-4">
     <div class="col-md-3 mb-3">
-        <div class="card stat-card donors">
+        <div class="card stat-card b-danger h-100">
             <div class="card-body">
-                <h5 class="text-muted"><i class="fas fa-users"></i> Total Donors</h5>
-                <h2 class="mb-0">@Model.TotalDonors</h2>
+                <h5 class="text-muted"><i class="fas fa-tint"></i> Blood Stock</h5>
+                <h2 class="mb-0">@Model.TotalBloodStock ml</h2>
+                <small class="text-muted d-block" style="visibility: hidden;">Pending: 0</small>
             </div>
         </div>
     </div>
     <div class="col-md-3 mb-3">
-        <div class="card stat-card donations">
+        <div class="card stat-card b-danger h-100">
             <div class="card-body">
                 <h5 class="text-muted"><i class="fas fa-hand-holding-heart"></i> Total Donations</h5>
                 <h2 class="mb-0">@Model.TotalDonations</h2>
@@ -30,19 +31,20 @@
         </div>
     </div>
     <div class="col-md-3 mb-3">
-        <div class="card stat-card requests">
+        <div class="card stat-card b-danger h-100">
             <div class="card-body">
-                <h5 class="text-muted"><i class="fas fa-hospital"></i> Blood Requests</h5>
+                <h5 class="text-muted"><i class="fas fa-hospital"></i> Hospital Blood Requests</h5>
                 <h2 class="mb-0">@Model.TotalBloodRequests</h2>
                 <small class="text-muted">Pending: @Model.PendingRequests</small>
             </div>
         </div>
     </div>
     <div class="col-md-3 mb-3">
-        <div class="card stat-card blood-types">
+        <div class="card stat-card b-danger h-100">
             <div class="card-body">
                 <h5 class="text-muted"><i class="fas fa-user-friends"></i> Total Users</h5>
                 <h2 class="mb-0">@Model.TotalUsers</h2>
+                <small class="text-muted d-block" style="visibility: hidden;">Pending: 0</small>
             </div>
         </div>
     </div>
@@ -98,7 +100,8 @@
                                 <th>Blood Type</th>
                                 <th>Donors</th>
                                 <th>Completed Donations</th>
-                                <th>Pending Requests</th>
+                                <th>Pending Donor Requests</th>
+                                <th>Pending Hospital Requests</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -108,6 +111,16 @@
                                     <td><span class="badge bg-danger">@stat.BloodType</span></td>
                                     <td>@stat.DonorCount</td>
                                     <td>@stat.TotalDonations</td>
+                                    <td>
+                                        @if (stat.PendingDonations > 0)
+                                        {
+                                            <span class="badge bg-info text-dark">@stat.PendingDonations</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">0</span>
+                                        }
+                                    </td>
                                     <td>
                                         @if (stat.RequestCount > 0)
                                         {
@@ -132,8 +145,8 @@
 <div class="row">
     <div class="col-md-6 mb-4">
         <div class="card h-100">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Donations</h5>
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Donations From Donors</h5>
             </div>
             <div class="card-body">
                 @if (Model.RecentDonations.Any())
@@ -171,8 +184,8 @@
 
     <div class="col-md-6 mb-4">
         <div class="card h-100">
-            <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Blood Requests</h5>
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-clock"></i> Recent Blood Requests From Hospitals</h5>
             </div>
             <div class="card-body">
                 @if (Model.RecentRequests.Any())

@@ -1,4 +1,5 @@
 using BloodDonationSystem.Data;
+using BloodDonationSystem.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,9 @@ builder.Services.AddSession(options =>
 
 // Add HttpContextAccessor for session access
 builder.Services.AddHttpContextAccessor();
+
+// Add Excel Export Service
+builder.Services.AddScoped<ExcelExportService>();
 
 var app = builder.Build();
 
