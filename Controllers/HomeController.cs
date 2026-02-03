@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace BloodDonationSystem.Controllers
-{
+namespace BloodDonationSystem.Controllers;
     public class HomeController : Controller
     {
         public IActionResult Index()
@@ -14,4 +13,3 @@ namespace BloodDonationSystem.Controllers
             return View();
         }
     }
-}

@@ -6,8 +6,7 @@ using BloodDonationSystem.Attributes;
 using BloodDonationSystem.Helpers;
 using System.ComponentModel.DataAnnotations;
 
-namespace BloodDonationSystem.Controllers
-{
+namespace BloodDonationSystem.Controllers;
     [AuthorizeRole("Hospital")]
     public class HospitalController : Controller
     {
@@ -207,4 +206,3 @@ namespace BloodDonationSystem.Controllers
         public int TotalQuantity { get; set; }
         public int AvailableDonors { get; set; }
     }
-}

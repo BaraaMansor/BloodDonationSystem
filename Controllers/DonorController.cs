@@ -6,8 +6,7 @@ using BloodDonationSystem.Attributes;
 using BloodDonationSystem.Helpers;
 using System.ComponentModel.DataAnnotations;
 
-namespace BloodDonationSystem.Controllers
-{
+namespace BloodDonationSystem.Controllers;
     [AuthorizeRole("Donor")]
     public class DonorController : Controller
     {
@@ -42,10 +41,10 @@ namespace BloodDonationSystem.Controllers
                 PendingDonations = donor.Donations.Count(d => d.Status == "Pending"),
                 LastDonationDate = donor.LastDonationDate,
                 CanDonateAgain = !donor.LastDonationDate.HasValue || 
-                                (DateTime.Now - donor.LastDonationDate.Value).TotalDays >= 56,
+                                (DateTime.Now - donor.LastDonationDate.Value).TotalDays >= 90,
                 DaysUntilEligible = donor.LastDonationDate.HasValue ? 
-                                    Math.Max(0, 56 - (int)(DateTime.Now - donor.LastDonationDate.Value).TotalDays) : 0,
-                RecentDonations = donor.Donations.OrderByDescending(d => d.DonationDate).Take(5).ToList()
+                                    Math.Max(0, 90 - (int)(DateTime.Now - donor.LastDonationDate.Value).TotalDays) : 0,
+                RecentDonations = donor.Donations.OrderByDescending(d => d.DonationDate).ToList()
             };
 
             return View(model);
@@ -153,9 +152,8 @@ namespace BloodDonationSystem.Controllers
             if (donor.LastDonationDate.HasValue)
             {
                 var daysSinceLastDonation = (DateTime.Now - donor.LastDonationDate.Value).TotalDays;
-                if (daysSinceLastDonation < 56)
+                if (daysSinceLastDonation < 90)
                 {
-                    TempData["ErrorMessage"] = $"You must wait {56 - (int)daysSinceLastDonation} more days before donating again.";
                     return RedirectToAction("Dashboard");
                 }
             }
@@ -184,7 +182,7 @@ namespace BloodDonationSystem.Controllers
                 if (donor.LastDonationDate.HasValue)
                 {
                     var daysSinceLastDonation = (DateTime.Now - donor.LastDonationDate.Value).TotalDays;
-                    if (daysSinceLastDonation < 56)
+                    if (daysSinceLastDonation < 90)
                     {
                         TempData["ErrorMessage"] = "You are not eligible to donate yet.";
                         return RedirectToAction("Dashboard");
@@ -216,24 +214,6 @@ namespace BloodDonationSystem.Controllers
         }
 
         // Donation History
-        public IActionResult DonationHistory()
-        {
-            var userId = HttpContext.Session.GetUserId();
-            var donor = _context.Donors
-                .Include(d => d.BloodType)
-                .Include(d => d.Donations)
-                .FirstOrDefault(d => d.UserId == userId);
-
-            if (donor == null)
-            {
-                TempData["ErrorMessage"] = "Donor profile not found.";
-                return RedirectToAction("Dashboard");
-            }
-
-            var donations = donor.Donations.OrderByDescending(d => d.DonationDate).ToList();
-            return View(donations);
-        }
-
         // Toggle Availability
         [HttpPost]
         public IActionResult ToggleAvailability()
@@ -251,11 +231,11 @@ namespace BloodDonationSystem.Controllers
             if (!donor.IsAvailable)
             {
                 var canDonate = !donor.LastDonationDate.HasValue || 
-                               (DateTime.Now - donor.LastDonationDate.Value).TotalDays >= 56;
+                               (DateTime.Now - donor.LastDonationDate.Value).TotalDays >= 90;
                 
                 if (!canDonate)
                 {
-                    var daysUntilEligible = 56 - (int)(DateTime.Now - donor.LastDonationDate!.Value).TotalDays;
+                    var daysUntilEligible = 90 - (int)(DateTime.Now - donor.LastDonationDate!.Value).TotalDays;
                     return RedirectToAction("Dashboard");
                 }
             }
@@ -316,4 +296,3 @@ namespace BloodDonationSystem.Controllers
         [StringLength(500)]
         public string? Notes { get; set; }
     }
-}

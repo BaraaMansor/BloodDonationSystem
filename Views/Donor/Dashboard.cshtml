@@ -29,42 +29,6 @@ else
     </div>
 }
 
-<!-- Statistics Cards -->
-<div class="row mb-4">
-    <div class="col-md-3 mb-3">
-        <div class="card stat-card donors">
-            <div class="card-body text-center">
-                <h5 class="text-muted"><i class="fas fa-tint"></i> Blood Type</h5>
-                <h2 class="mb-0 text-danger">@Model.Donor.BloodType.TypeName</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="card stat-card donations">
-            <div class="card-body text-center">
-                <h5 class="text-muted"><i class="fas fa-hand-holding-heart"></i> Total Donations</h5>
-                <h2 class="mb-0">@Model.TotalDonations</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="card stat-card requests">
-            <div class="card-body text-center">
-                <h5 class="text-muted"><i class="fas fa-check-circle"></i> Completed</h5>
-                <h2 class="mb-0">@Model.CompletedDonations</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-3">
-        <div class="card stat-card blood-types">
-            <div class="card-body text-center">
-                <h5 class="text-muted"><i class="fas fa-clock"></i> Pending</h5>
-                <h2 class="mb-0">@Model.PendingDonations</h2>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Quick Actions -->
 <div class="row mb-4">
     <div class="col-12">
@@ -83,11 +47,6 @@ else
                         </div>
                     }
                     <div class="col-md-3 mb-2">
-                        <a href="/Donor/DonationHistory" class="btn btn-outline-danger w-100">
-                            <i class="fas fa-history"></i> Donation History
-                        </a>
-                    </div>
-                    <div class="col-md-3 mb-2">
                         <a href="/Donor/Profile" class="btn btn-outline-danger w-100">
                             <i class="fas fa-user"></i> View Profile
                         </a>
@@ -97,7 +56,7 @@ else
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-outline-warning w-100">
                                 <i class="fas fa-@(Model.Donor.IsAvailable ? "ban" : "check")"></i> 
-                                @(Model.Donor.IsAvailable ? "Mark Unavailable" : "Mark Available")
+                                @(Model.Donor.IsAvailable ? "Mark Unavailable To Donate" : "Mark Available To Donate")
                             </button>
                         </form>
                     </div>
@@ -168,9 +127,38 @@ else
             </div>
             <div class="card-body">
                 <div class="row mb-3">
-                    <div class="col-12">
+                    <div class="col-md-6">
+                        <h6>Total Donations</h6>
+                        <p class="text-muted mb-0">@Model.TotalDonations</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Completed Donations</h6>
+                        <p class="text-muted mb-0">@Model.CompletedDonations</p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6>Pending Donations</h6>
+                        <p class="text-muted mb-0">@Model.PendingDonations</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Total Blood Donated</h6>
+                        <p class="text-muted mb-0">
+                            @{
+                                var totalQuantity = Model.Donor.Donations.Where(d => d.Status == "Completed").Sum(d => d.Quantity);
+                            }
+                            @totalQuantity ml
+                            @if (totalQuantity > 0)
+                            {
+                                <small>(@(totalQuantity / 1000.0) liters)</small>
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
                         <h6>Last Donation</h6>
-                        <p class="text-muted">
+                        <p class="text-muted mb-0">
                             @if (Model.LastDonationDate.HasValue)
                             {
                                 @Model.LastDonationDate.Value.ToString("MMMM dd, yyyy")
@@ -182,33 +170,16 @@ else
                             }
                         </p>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-12">
+                    <div class="col-md-6">
                         <h6>Next Eligible Date</h6>
-                        <p class="text-muted">
+                        <p class="text-muted mb-0">
                             @if (Model.LastDonationDate.HasValue)
                             {
-                                @Model.LastDonationDate.Value.AddDays(56).ToString("MMMM dd, yyyy")
+                                @Model.LastDonationDate.Value.AddDays(90).ToString("MMMM dd, yyyy")
                             }
                             else
                             {
                                 <text>Available now</text>
-                            }
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <h6>Total Blood Donated</h6>
-                        <p class="text-muted">
-                            @{
-                                var totalQuantity = Model.Donor.Donations.Where(d => d.Status == "Completed").Sum(d => d.Quantity);
-                            }
-                            @totalQuantity ml
-                            @if (totalQuantity > 0)
-                            {
-                                <br><small>(@(totalQuantity / 1000.0) liters)</small>
                             }
                         </p>
                     </div>
@@ -223,7 +194,7 @@ else
     <div class="col-12">
         <div class="card">
             <div class="card-header bg-info text-white">
-                <h5 class="mb-0"><i class="fas fa-history"></i> Recent Donation History</h5>
+                <h5 class="mb-0"><i class="fas fa-history"></i> Donation History</h5>
             </div>
             <div class="card-body">
                 @if (Model.RecentDonations.Any())
@@ -238,10 +209,11 @@ else
                                     <th>Notes</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach (var donation in Model.RecentDonations)
+                            <tbody id="donation-history-tbody">
+                                @for (int i = 0; i < Model.RecentDonations.Count; i++)
                                 {
-                                    <tr>
+                                    var donation = Model.RecentDonations[i];
+                                    <tr class="@(i >= 3 ? "d-none" : "") donation-row">
                                         <td>@donation.DonationDate.ToString("MMM dd, yyyy")</td>
                                         <td>@donation.Quantity ml</td>
                                         <td><span class="status-badge status-@donation.Status.ToLower()">@donation.Status</span></td>
@@ -251,9 +223,14 @@ else
                             </tbody>
                         </table>
                     </div>
-                    <div class="text-center">
-                        <a href="/Donor/DonationHistory" class="btn btn-sm btn-outline-info">View All History</a>
-                    </div>
+                    @if (Model.RecentDonations.Count > 3)
+                    {
+                        <div class="text-center">
+                            <button id="toggle-history-btn" class="btn btn-sm btn-outline-info" onclick="toggleHistory()">
+                                <i class="fas fa-chevron-down"></i> View All History (@Model.RecentDonations.Count total)
+                            </button>
+                        </div>
+                    }
                 }
                 else
                 {
@@ -263,3 +240,33 @@ else
         </div>
     </div>
 </div>
+
+<script>
+    let historyExpanded = false;
+    
+    function toggleHistory() {
+        const rows = document.querySelectorAll('.donation-row');
+        const btn = document.getElementById('toggle-history-btn');
+        const icon = btn.querySelector('i');
+        
+        historyExpanded = !historyExpanded;
+        
+        rows.forEach((row, index) => {
+            if (index >= 3) {
+                if (historyExpanded) {
+                    row.classList.remove('d-none');
+                } else {
+                    row.classList.add('d-none');
+                }
+            }
+        });
+        
+        if (historyExpanded) {
+            icon.className = 'fas fa-chevron-up';
+            btn.innerHTML = '<i class="fas fa-chevron-up"></i> Show Less';
+        } else {
+            icon.className = 'fas fa-chevron-down';
+            btn.innerHTML = '<i class="fas fa-chevron-down"></i> View All History (@Model.RecentDonations.Count total)';
+        }
+    }
+</script>

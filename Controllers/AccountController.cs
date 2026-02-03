@@ -5,8 +5,7 @@ using BloodDonationSystem.Helpers;
 using BCrypt.Net;
 using System.ComponentModel.DataAnnotations;
 
-namespace BloodDonationSystem.Controllers
-{
+namespace BloodDonationSystem.Controllers;
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -191,4 +190,3 @@ namespace BloodDonationSystem.Controllers
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
     }
-}

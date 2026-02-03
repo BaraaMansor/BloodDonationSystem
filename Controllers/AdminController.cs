@@ -5,8 +5,7 @@ using BloodDonationSystem.Models;
 using BloodDonationSystem.Attributes;
 using BloodDonationSystem.Helpers;
 
-namespace BloodDonationSystem.Controllers
-{
+namespace BloodDonationSystem.Controllers;
     [AuthorizeRole("Admin")]
     public class AdminController : Controller
     {
@@ -125,13 +124,13 @@ namespace BloodDonationSystem.Controllers
                 return RedirectToAction("Donations");
             }
 
-            // Check if donor can donate (56 days rule)
+            // Check if donor can donate (90 days rule)
             if (donation.Donor.LastDonationDate.HasValue)
             {
                 var daysSinceLastDonation = (DateTime.Now - donation.Donor.LastDonationDate.Value).TotalDays;
-                if (daysSinceLastDonation < 56)
+                if (daysSinceLastDonation < 90)
                 {
-                    TempData["ErrorMessage"] = $"Donor must wait {56 - (int)daysSinceLastDonation} more days before donating again.";
+                    TempData["ErrorMessage"] = $"Donor must wait {90 - (int)daysSinceLastDonation} more days before donating again.";
                     return RedirectToAction("Donations");
                 }
             }
@@ -158,7 +157,7 @@ namespace BloodDonationSystem.Controllers
 
             donation.Status = "Completed";
             donation.Donor.LastDonationDate = donation.DonationDate;
-            donation.Donor.IsAvailable = false; // Mark as unavailable for 56 days
+            donation.Donor.IsAvailable = false; // Mark as unavailable for 90 days
 
             _context.SaveChanges();
 
@@ -377,4 +376,3 @@ namespace BloodDonationSystem.Controllers
         public int Count { get; set; }
         public int TotalQuantity { get; set; }
     }
-}

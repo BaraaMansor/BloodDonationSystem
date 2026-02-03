@@ -63,5 +63,5 @@ A comprehensive ASP.NET MVC application for managing blood donation activities b
 After seeding the database, you can login with:
 
 - **Admin:** admin@bloodbank.com / Admin123!
-- **Test Donor:** donor@test.com / Donor123!
-- **Test Hospital:** hospital@test.com / Hospital123!
+
+You can register new Donor and Hospital accounts through the registration page.
