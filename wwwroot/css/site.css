@@ -43,6 +43,14 @@ body {
   border-left-color: #dc3545;
 }
 
+.card.b-danger {
+  border-left: 4px solid #dc3545 !important;
+}
+
+.b-danger {
+  border-left: 4px solid #dc3545;
+}
+
 .hero-section {
   background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
   color: white;

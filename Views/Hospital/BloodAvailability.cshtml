@@ -19,7 +19,7 @@
     <div class="col-12">
         <div class="alert alert-info">
             <i class="fas fa-info-circle"></i>
-            <strong>Live Blood Stock:</strong> This shows the current available blood units and donors in our system.
+            <strong>Live Blood Stock:</strong> This shows the current available blood in our inventory.
         </div>
     </div>
 </div>
@@ -39,11 +39,7 @@
                                 <tr>
                                     <th>Blood Type</th>
                                     <th>Description</th>
-                                    <th>Available Units</th>
-                                    <th>Total Quantity</th>
-                                    <th>Available Donors</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Available Quantity (ml)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,45 +48,16 @@
                                     <tr>
                                         <td><h5><span class="badge bg-danger">@blood.BloodType</span></h5></td>
                                         <td>@blood.Description</td>
-                                        <td><strong>@blood.AvailableUnits</strong> units</td>
-                                        <td><strong>@blood.TotalQuantity</strong> ml</td>
                                         <td>
-                                            <span class="badge bg-success">
-                                                <i class="fas fa-users"></i> @blood.AvailableDonors donors
-                                            </span>
-                                        </td>
-                                        <td>
-                                            @if (blood.AvailableUnits >= 10)
-                                            {
-                                                <span class="badge bg-success">Good Stock</span>
-                                            }
-                                            else if (blood.AvailableUnits >= 5)
-                                            {
-                                                <span class="badge bg-warning text-dark">Moderate</span>
-                                            }
-                                            else if (blood.AvailableUnits > 0)
-                                            {
-                                                <span class="badge bg-danger">Low Stock</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge bg-dark">Out of Stock</span>
-                                            }
-                                        </td>
-                                        <td>
-                                            <a href="/Hospital/CreateRequest" class="btn btn-sm btn-danger">
-                                                <i class="fas fa-plus"></i> Request
-                                            </a>
+                                            <strong class="text-success">@blood.TotalQuantity ml</strong>
                                         </td>
                                     </tr>
                                 }
                             </tbody>
                             <tfoot class="table-light">
                                 <tr class="fw-bold">
-                                    <td colspan="2">Total</td>
-                                    <td>@Model.Sum(b => b.AvailableUnits) units</td>
-                                    <td>@Model.Sum(b => b.TotalQuantity) ml</td>
-                                    <td colspan="3">@Model.Sum(b => b.AvailableDonors) donors available</td>
+                                    <td colspan="2">Total Available Stock</td>
+                                    <td class="text-success">@Model.Sum(b => b.TotalQuantity) ml</td>
                                 </tr>
                             </tfoot>
                         </table>

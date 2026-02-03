@@ -25,6 +25,9 @@ builder.Services.AddHttpContextAccessor();
 // Add Excel Export Service
 builder.Services.AddScoped<ExcelExportService>();
 
+// Add Blood Compatibility Service
+builder.Services.AddScoped<BloodCompatibilityService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

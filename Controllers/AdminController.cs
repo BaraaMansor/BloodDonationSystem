@@ -12,11 +12,13 @@ namespace BloodDonationSystem.Controllers;
     {
         private readonly ApplicationDbContext _context;
         private readonly ExcelExportService _excelService;
+        private readonly BloodCompatibilityService _bloodCompatibility;
 
-        public AdminController(ApplicationDbContext context, ExcelExportService excelService)
+        public AdminController(ApplicationDbContext context, ExcelExportService excelService, BloodCompatibilityService bloodCompatibility)
         {
             _context = context;
             _excelService = excelService;
+            _bloodCompatibility = bloodCompatibility;
         }
 
         // Dashboard
@@ -255,27 +257,36 @@ namespace BloodDonationSystem.Controllers;
                 return RedirectToAction("BloodRequests");
             }
 
-            // Check if there's enough blood available
+            // Get compatible blood types for this request
+            var compatibleBloodTypes = _bloodCompatibility.GetCompatibleDonors(request.BloodType.TypeName);
+            
+            // Get blood type IDs for compatible types
+            var compatibleBloodTypeIds = _context.BloodTypes
+                .Where(bt => compatibleBloodTypes.Contains(bt.TypeName))
+                .Select(bt => bt.Id)
+                .ToList();
+
+            // Calculate available quantity from ALL compatible blood types
             var totalDonated = _context.Donations
-                .Where(d => d.Donor.BloodTypeId == request.BloodTypeId && d.Status == "Completed")
+                .Where(d => compatibleBloodTypeIds.Contains(d.Donor.BloodTypeId) && d.Status == "Completed")
                 .Sum(d => d.Quantity);
 
             var totalFulfilled = _context.BloodRequests
-                .Where(r => r.BloodTypeId == request.BloodTypeId && r.Status == "Fulfilled")
+                .Where(r => compatibleBloodTypeIds.Contains(r.BloodTypeId) && r.Status == "Fulfilled")
                 .Sum(r => r.Quantity);
 
             var availableQuantity = totalDonated - totalFulfilled;
 
             if (availableQuantity < request.Quantity)
             {
-                TempData["ErrorMessage"] = $"Insufficient blood! Available: {availableQuantity}ml, Requested: {request.Quantity}ml. Need {request.Quantity - availableQuantity}ml more.";
+                TempData["ErrorMessage"] = $"Insufficient compatible blood! Available: {availableQuantity}ml, Requested: {request.Quantity}ml. Need {request.Quantity - availableQuantity}ml more. Compatible types: {string.Join(", ", compatibleBloodTypes)}";
                 return RedirectToAction("BloodRequests");
             }
 
             request.Status = "Fulfilled";
             _context.SaveChanges();
 
-            TempData["SuccessMessage"] = $"Blood request fulfilled successfully. Remaining {request.BloodType.TypeName}: {availableQuantity - request.Quantity}ml";
+            TempData["SuccessMessage"] = $"Blood request fulfilled successfully using compatible blood types. Remaining compatible blood: {availableQuantity - request.Quantity}ml";
             return RedirectToAction("BloodRequests");
         }
 
