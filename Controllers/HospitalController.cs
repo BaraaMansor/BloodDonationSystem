@@ -88,6 +88,7 @@ namespace BloodDonationSystem.Controllers;
                     Quantity = model.QuantityRequired,
                     HospitalName = user!.FullName,
                     Notes = model.Notes,
+                    IsEmergency = model.IsEmergency,
                     Status = "Pending",
                     RequestDate = DateTime.Now
                 };
@@ -193,6 +194,9 @@ namespace BloodDonationSystem.Controllers;
         [Range(100, 5000, ErrorMessage = "Quantity must be between 100ml and 5000ml")]
         [Display(Name = "Quantity Required (ml)")]
         public int QuantityRequired { get; set; }
+
+        [Display(Name = "Emergency Request")]
+        public bool IsEmergency { get; set; }
 
         [Display(Name = "Notes / Special Requirements")]
         public string? Notes { get; set; }

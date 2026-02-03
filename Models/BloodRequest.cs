@@ -24,6 +24,8 @@ namespace BloodDonationSystem.Models
         [StringLength(20)]
         public string Status { get; set; } = "Pending"; // Pending, Approved, Rejected, Fulfilled
 
+        public bool IsEmergency { get; set; } = false;
+
         [StringLength(500)]
         public string? Notes { get; set; }
 

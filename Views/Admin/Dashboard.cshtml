@@ -196,7 +196,15 @@
                             <div class="list-group-item">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
-                                        <h6 class="mb-1">@request.HospitalName</h6>
+                                        <h6 class="mb-1">
+                                            @request.HospitalName
+                                            @if (request.IsEmergency)
+                                            {
+                                                <span class="badge bg-danger">
+                                                    <i class="fas fa-exclamation-triangle"></i> EMERGENCY
+                                                </span>
+                                            }
+                                        </h6>
                                         <small class="text-muted">
                                             <span class="badge bg-danger">@request.BloodType.TypeName</span>
                                             @request.Quantity ml - @request.RequestDate.ToString("MMM dd, yyyy")

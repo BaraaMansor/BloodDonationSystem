@@ -12,6 +12,7 @@
                             <th>Hospital</th>
                             <th>Blood Type</th>
                             <th>Quantity</th>
+                            <th>Urgency</th>
                             <th>Request Date</th>
                             <th>Status</th>
                             <th>Notes</th>
@@ -28,6 +29,18 @@
                                 </td>
                                 <td><span class="badge bg-danger fs-6">@request.BloodType.TypeName</span></td>
                                 <td>@request.Quantity ml</td>
+                                <td>
+                                    @if (request.IsEmergency)
+                                    {
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-exclamation-triangle"></i> Emergency
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info">Standard</span>
+                                    }
+                                </td>
                                 <td>@request.RequestDate.ToString("MMM dd, yyyy")</td>
                                 <td><span class="status-badge status-@request.Status.ToLower()">@request.Status</span></td>
                                 <td>
