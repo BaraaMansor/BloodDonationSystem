@@ -137,10 +137,10 @@ namespace BloodDonationSystem.Controllers;
                 })
                 .ToListAsync();
 
-            // Get fulfilled requests grouped by blood type
+            // Get fulfilled requests grouped by the ACTUAL blood type used (FulfilledWithBloodTypeId)
             var fulfilledRequests = await _context.BloodRequests
-                .Where(r => r.Status == "Fulfilled")
-                .GroupBy(r => r.BloodTypeId)
+                .Where(r => r.Status == "Fulfilled" && r.FulfilledWithBloodTypeId.HasValue)
+                .GroupBy(r => r.FulfilledWithBloodTypeId.Value)
                 .Select(g => new
                 {
                     BloodTypeId = g.Key,

@@ -108,7 +108,7 @@
                                     <td>@bt.DonorCount</td>
                                     <td>@bt.CompletedDonations</td>
                                     <td><strong>@bt.TotalQuantity.ToString("N0")</strong></td>
-                                    <td class="text-danger">-@bt.FulfilledQuantity.ToString("N0")</td>
+                                    <td class="text-danger">@bt.FulfilledQuantity.ToString("N0")</td>
                                     <td><strong class="text-success">@bt.AvailableQuantity.ToString("N0")</strong></td>
                                     <td>
                                         @if (bt.PendingRequests > 0)
@@ -131,7 +131,7 @@
                                 <td><strong>@Model.BloodTypeDistribution.Sum(b => b.DonorCount)</strong></td>
                                 <td><strong>@Model.BloodTypeDistribution.Sum(b => b.CompletedDonations)</strong></td>
                                 <td><strong>@Model.BloodTypeDistribution.Sum(b => b.TotalQuantity).ToString("N0")</strong></td>
-                                <td class="text-danger"><strong>-@Model.BloodTypeDistribution.Sum(b => b.FulfilledQuantity).ToString("N0")</strong></td>
+                                <td class="text-danger"><strong>@Model.BloodTypeDistribution.Sum(b => b.FulfilledQuantity).ToString("N0")</strong></td>
                                 <td><strong class="text-success">@Model.BloodTypeDistribution.Sum(b => b.AvailableQuantity).ToString("N0")</strong></td>
                                 <td><strong>@Model.BloodTypeDistribution.Sum(b => b.PendingRequests)</strong></td>
                                 <td><strong>@Model.BloodTypeDistribution.Sum(b => b.RequestedQuantity).ToString("N0")</strong></td>

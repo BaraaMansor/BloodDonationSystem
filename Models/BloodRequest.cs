@@ -13,6 +13,9 @@ namespace BloodDonationSystem.Models
         [Required]
         public int BloodTypeId { get; set; }
 
+        // Track which blood type was actually used to fulfill this request (for compatibility cases)
+        public int? FulfilledWithBloodTypeId { get; set; }
+
         [Required]
         [Range(1, 10000)]
         public int Quantity { get; set; } // in ml
