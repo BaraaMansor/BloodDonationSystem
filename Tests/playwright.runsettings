@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <RunConfiguration>
+    <MaxCpuCount>1</MaxCpuCount>
+    <ResultsDirectory>.\TestResults</ResultsDirectory>
+    <TargetFramework>net8.0</TargetFramework>
+  </RunConfiguration>
+  <NUnit>
+    <NumberOfTestWorkers>1</NumberOfTestWorkers>
+  </NUnit>
+  <Playwright>
+    <BrowserName>chromium</BrowserName>
+    <LaunchOptions>
+      <Headless>false</Headless>
+      <SlowMo>200</SlowMo>
+    </LaunchOptions>
+    <ExpectTimeout>10000</ExpectTimeout>
+  </Playwright>
+</RunSettings>

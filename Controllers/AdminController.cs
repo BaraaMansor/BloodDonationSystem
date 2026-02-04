@@ -292,7 +292,7 @@ namespace BloodDonationSystem.Controllers;
                     selectedBloodTypeId = bloodTypeId;
                     selectedAvailable = available;
                     selectedBloodType = bloodTypeName;
-                    break; // Found enough, use this one (already in priority order)
+                    break;
                 }
             }
 
@@ -333,11 +333,10 @@ namespace BloodDonationSystem.Controllers;
         // Reports
         public IActionResult Reports()
         {
-            // Get fulfilled quantities by the actual blood type used
             var fulfilledByActualType = _context.BloodRequests
                 .Where(r => r.Status == "Fulfilled" && r.FulfilledWithBloodTypeId.HasValue)
-                .GroupBy(r => r.FulfilledWithBloodTypeId.Value)
-                .Select(g => new { BloodTypeId = g.Key, FulfilledQuantity = g.Sum(r => r.Quantity) })
+                .GroupBy(r => r.FulfilledWithBloodTypeId!.Value)
+                .Select(g => new { BloodTypeId = g.Key, FulfilledQuantity = g.Sum(r => (int?)r.Quantity) ?? 0 })
                 .ToDictionary(x => x.BloodTypeId, x => x.FulfilledQuantity);
 
             var bloodTypeDistribution = _context.BloodTypes
@@ -373,7 +372,7 @@ namespace BloodDonationSystem.Controllers;
                 TotalBloodRequests = _context.BloodRequests.Count(),
                 FulfilledRequests = _context.BloodRequests.Count(r => r.Status == "Fulfilled"),
                 BloodTypeDistribution = bloodTypeDistribution,
-                MonthlyDonations = _context.Donations
+                MonthlyDonations = [.. _context.Donations
                     .Where(d => d.Status == "Completed")
                     .GroupBy(d => new { d.DonationDate.Year, d.DonationDate.Month })
                     .Select(g => new
@@ -391,8 +390,7 @@ namespace BloodDonationSystem.Controllers;
                         TotalQuantity = g.TotalQuantity
                     })
                     .OrderByDescending(m => m.Month)
-                    .Take(12)
-                    .ToList()
+                    .Take(12)]
             };
 
             return View(model);
@@ -419,7 +417,7 @@ namespace BloodDonationSystem.Controllers;
                         PendingRequests = bt.BloodRequests.Count(r => r.Status == "Pending" || r.Status == "Approved"),
                         RequestedQuantity = bt.BloodRequests.Where(r => r.Status == "Pending" || r.Status == "Approved").Sum(r => r.Quantity)
                     }).ToList(),
-                MonthlyDonations = _context.Donations
+                MonthlyDonations = [.. _context.Donations
                     .Where(d => d.Status == "Completed")
                     .GroupBy(d => new { d.DonationDate.Year, d.DonationDate.Month })
                     .Select(g => new
@@ -437,8 +435,7 @@ namespace BloodDonationSystem.Controllers;
                         TotalQuantity = g.TotalQuantity
                     })
                     .OrderByDescending(m => m.Month)
-                    .Take(12)
-                    .ToList()
+                    .Take(12)]
             };
 
             var excelData = _excelService.GenerateReportsExcel(model);

@@ -1,0 +1,493 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="f9da8e89-91ad-42aa-8be6-28b965a4009d" name="mrboo@AL-BARAA 2026-02-04 11:03:13" runUser="AL-BARAA\mrboo" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-02-04T11:03:13.0439399+03:00" queuing="2026-02-04T11:03:13.0439409+03:00" start="2026-02-04T11:03:06.8237949+03:00" finish="2026-02-04T11:04:20.4699922+03:00" />
+  <TestSettings name="default" id="2d2b0b76-b6eb-4b10-8fd4-a5a8dde58cec">
+    <Deployment runDeploymentRoot="mrboo_AL-BARAA_2026-02-04_11_03_13" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="454be7b2-b9e8-40c8-88bb-ab663cba18a7" testId="6520592d-8b64-c02a-6f05-311f9f43529e" testName="BloodRequest_AdminCanFulfillRequests" computerName="AL-BARAA" duration="00:00:04.1486460" startTime="2026-02-04T11:03:30.8937009+03:00" endTime="2026-02-04T11:03:35.0423458+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="454be7b2-b9e8-40c8-88bb-ab663cba18a7">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal) in /_/src/Playwright/Transport/Connection.cs:line 535&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="58a345c3-c2ca-4227-8ae1-d2549183b842" testId="85118f22-f9d1-f5fe-8fc4-5e00bf6524ec" testName="Reports_ExcelExportAvailable" computerName="AL-BARAA" duration="00:00:09.6016070" startTime="2026-02-04T11:04:10.6906156+03:00" endTime="2026-02-04T11:04:20.2922222+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="58a345c3-c2ca-4227-8ae1-d2549183b842" />
+    <UnitTestResult executionId="f6f8f9ac-2a9d-4ecd-9734-bf0c4beb84df" testId="b9413328-2528-50de-d393-65caca193767" testName="BloodRequest_EmergencyRequestsAreHighlighted" computerName="AL-BARAA" duration="00:00:03.3274260" startTime="2026-02-04T11:03:35.0423969+03:00" endTime="2026-02-04T11:03:38.3698215+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6f8f9ac-2a9d-4ecd-9734-bf0c4beb84df">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c7be7143-2fe8-48ff-a3de-7c906544b802" testId="3ce970dc-81a9-20d9-6187-f1f0b4475a6f" testName="BloodCompatibility_ABPositive_CanReceiveFromAll" computerName="AL-BARAA" duration="00:00:03.3584380" startTime="2026-02-04T11:03:24.1601360+03:00" endTime="2026-02-04T11:03:27.5185721+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c7be7143-2fe8-48ff-a3de-7c906544b802">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal) in /_/src/Playwright/Transport/Connection.cs:line 535&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a27552fb-7e6b-4f07-8203-ad65f74b88e2" testId="a29faa31-6106-8ba9-5b29-2a15d0f27754" testName="BloodTypes_AllEightTypesExist" computerName="AL-BARAA" duration="00:00:03.3377090" startTime="2026-02-04T11:03:41.7091739+03:00" endTime="2026-02-04T11:03:45.0468814+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a27552fb-7e6b-4f07-8203-ad65f74b88e2">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0872c3ef-a39f-4b7d-88bd-a85985a8c49a" testId="9b10f213-68d7-6f45-7f18-e54481a84712" testName="InventoryTracking_TracksActualTypeUsed" computerName="AL-BARAA" duration="00:00:03.3648110" startTime="2026-02-04T11:04:03.8574000+03:00" endTime="2026-02-04T11:04:07.2222165+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0872c3ef-a39f-4b7d-88bd-a85985a8c49a">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b389e935-1752-4f58-bd40-b4882615a084" testId="52e3b69f-ebf2-1c8a-b16d-1442431748e2" testName="Reports_DisplaysAllStatistics" computerName="AL-BARAA" duration="00:00:03.4682870" startTime="2026-02-04T11:04:07.2222794+03:00" endTime="2026-02-04T11:04:10.6905660+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b389e935-1752-4f58-bd40-b4882615a084">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="aad10a12-c4ce-4bc5-bc1f-6584d96c896f" testId="3939e763-44a6-ec3f-09f1-5623131f3555" testName="DonationManagement_AdminCanApproveDonations" computerName="AL-BARAA" duration="00:00:04.1824320" startTime="2026-02-04T11:03:45.0469432+03:00" endTime="2026-02-04T11:03:49.2293742+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aad10a12-c4ce-4bc5-bc1f-6584d96c896f">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="df42720d-27ae-44a8-a6df-085c6b00694d" testId="f2f8d047-aa8c-cf06-50a2-ba52486eb92f" testName="AdminDashboard_ShowsKeyMetrics" computerName="AL-BARAA" duration="00:00:05.1208900" startTime="2026-02-04T11:03:07.8608041+03:00" endTime="2026-02-04T11:03:12.9816074+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="df42720d-27ae-44a8-a6df-085c6b00694d">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal) in /_/src/Playwright/Transport/Connection.cs:line 535&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5874f3dc-de2b-4865-acc9-d470a5474a54" testId="c5fee354-6300-0858-9ec3-0339234f82a5" testName="BloodCompatibility_OMinusPreservation" computerName="AL-BARAA" duration="00:00:03.3750170" startTime="2026-02-04T11:03:27.5186318+03:00" endTime="2026-02-04T11:03:30.8936475+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5874f3dc-de2b-4865-acc9-d470a5474a54">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal) in /_/src/Playwright/Transport/Connection.cs:line 535&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="424d5dd2-89e6-4d8a-ae0e-c1a3e6a7fe8d" testId="8d2e4a9b-b69f-fbc4-5563-b3ee202ce9b9" testName="BloodAvailability_MatchesReportsPage" computerName="AL-BARAA" duration="00:00:03.4764850" startTime="2026-02-04T11:03:20.6835948+03:00" endTime="2026-02-04T11:03:24.1600789+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="424d5dd2-89e6-4d8a-ae0e-c1a3e6a7fe8d">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal) in /_/src/Playwright/Transport/Connection.cs:line 535&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7340cf90-56a1-4cb4-97c4-468c5f843491" testId="f8eea19b-4c1a-0d9e-32ee-0dba8aeb3a18" testName="HospitalDashboard_ShowsRequestStatistics" computerName="AL-BARAA" duration="00:00:03.6140840" startTime="2026-02-04T11:03:52.5737289+03:00" endTime="2026-02-04T11:03:56.1878090+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7340cf90-56a1-4cb4-97c4-468c5f843491">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5e472be0-4de5-47a7-91ff-161b4d7417a8" testId="cc84c73c-713a-3108-9789-f05535d01584" testName="DonationManagement_CompletedDonationsIncreaseStock" computerName="AL-BARAA" duration="00:00:03.3442080" startTime="2026-02-04T11:03:49.2294707+03:00" endTime="2026-02-04T11:03:52.5736780+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5e472be0-4de5-47a7-91ff-161b4d7417a8">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="98b7a170-86b1-4c2b-8570-e1d40dd47413" testId="65f4ab37-8156-4b5c-b635-8f349aa56656" testName="BloodRequest_HospitalCanCreateRequest" computerName="AL-BARAA" duration="00:00:03.3392390" startTime="2026-02-04T11:03:38.3698863+03:00" endTime="2026-02-04T11:03:41.7091244+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="98b7a170-86b1-4c2b-8570-e1d40dd47413">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8f9aa944-fcc1-47aa-8e24-721b66a70ad0" testId="7316fe2f-0cd8-8a04-a32f-9a0e6a7f4c01" testName="InventoryTracking_AvailableQuantityAccurate" computerName="AL-BARAA" duration="00:00:04.2638700" startTime="2026-02-04T11:03:59.5934815+03:00" endTime="2026-02-04T11:04:03.8573505+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8f9aa944-fcc1-47aa-8e24-721b66a70ad0">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2bdf55bf-7d19-4dd3-9115-f0bad89dfd62" testId="afac70d1-fdd1-9967-9264-78ee963384ee" testName="AdminLogin_Success" computerName="AL-BARAA" duration="00:00:03.4940520" startTime="2026-02-04T11:03:12.9843683+03:00" endTime="2026-02-04T11:03:16.4784201+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2bdf55bf-7d19-4dd3-9115-f0bad89dfd62">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal) in /_/src/Playwright/Transport/Connection.cs:line 535&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b3a39f85-6c1c-4aa0-8c4a-d95af511f1f2" testId="80e175a8-28ea-5834-0786-2e9cf0362d21" testName="BloodAvailability_HospitalCanCheckStock" computerName="AL-BARAA" duration="00:00:04.2047570" startTime="2026-02-04T11:03:16.4784877+03:00" endTime="2026-02-04T11:03:20.6832422+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3a39f85-6c1c-4aa0-8c4a-d95af511f1f2">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal) in /_/src/Playwright/Transport/Connection.cs:line 535&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ebd3792e-13b1-4b76-bd43-ae5d1024bab6" testId="6d1cbda6-ded7-6f7a-55d8-0abca73bce6a" testName="InvalidLogin_ShowsError" computerName="AL-BARAA" duration="00:00:03.4055250" startTime="2026-02-04T11:03:56.1879048+03:00" endTime="2026-02-04T11:03:59.5934275+03:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ebd3792e-13b1-4b76-bd43-ae5d1024bab6">
+      <Output>
+        <ErrorInfo>
+          <Message>Microsoft.Playwright.PlaywrightException : net::ERR_CONNECTION_REFUSED at https://localhost:58811/&#xD;
+Call log:&#xD;
+  - navigating to "https://localhost:58811/", waiting until "load"</Message>
+          <StackTrace>   at Microsoft.Playwright.Transport.Connection.InnerSendMessageToServerAsync[T](ChannelOwner object, String method, Dictionary`2 dictionary, Boolean keepNulls) in /_/src/Playwright/Transport/Connection.cs:line 206&#xD;
+   at Microsoft.Playwright.Transport.Connection.WrapApiCallAsync[T](Func`1 action, Boolean isInternal)&#xD;
+   at Microsoft.Playwright.Core.Frame.GotoAsync(String url, FrameGotoOptions options) in /_/src/Playwright/Core/Frame.cs:line 793&#xD;
+   at BloodDonationSystem.Tests.BloodDonationSystemTests.Setup() in C:\Projects\C#\BloodDonationSystem\Tests\BloodDonationSystemTests.cs:line 22&#xD;
+   at NUnit.Framework.Internal.TaskAwaitAdapter.GenericAdapter`1.BlockUntilCompleted()&#xD;
+   at NUnit.Framework.Internal.MessagePumpStrategy.NoMessagePumpStrategy.WaitForCompletion(AwaitAdapter awaiter)&#xD;
+   at NUnit.Framework.Internal.AsyncToSyncAdapter.Await(Func`1 invoke)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUpOrTearDownMethod(TestExecutionContext context, IMethodInfo method)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownItem.RunSetUp(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.SetUpTearDownCommand.&lt;&gt;c__DisplayClass0_0.&lt;.ctor&gt;b__0(TestExecutionContext context)&#xD;
+   at NUnit.Framework.Internal.Commands.BeforeAndAfterTestCommand.&lt;&gt;c__DisplayClass1_0.&lt;Execute&gt;b__0()&#xD;
+   at NUnit.Framework.Internal.Commands.DelegatingTestCommand.RunTestMethodInThreadAbortSafeZone(TestExecutionContext context, Action action)
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="DonationManagement_CompletedDonationsIncreaseStock" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="cc84c73c-713a-3108-9789-f05535d01584">
+      <Execution id="5e472be0-4de5-47a7-91ff-161b4d7417a8" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="DonationManagement_CompletedDonationsIncreaseStock" />
+    </UnitTest>
+    <UnitTest name="BloodRequest_AdminCanFulfillRequests" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="6520592d-8b64-c02a-6f05-311f9f43529e">
+      <Execution id="454be7b2-b9e8-40c8-88bb-ab663cba18a7" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="BloodRequest_AdminCanFulfillRequests" />
+    </UnitTest>
+    <UnitTest name="Reports_ExcelExportAvailable" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="85118f22-f9d1-f5fe-8fc4-5e00bf6524ec">
+      <Execution id="58a345c3-c2ca-4227-8ae1-d2549183b842" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="Reports_ExcelExportAvailable" />
+    </UnitTest>
+    <UnitTest name="InventoryTracking_AvailableQuantityAccurate" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="7316fe2f-0cd8-8a04-a32f-9a0e6a7f4c01">
+      <Execution id="8f9aa944-fcc1-47aa-8e24-721b66a70ad0" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="InventoryTracking_AvailableQuantityAccurate" />
+    </UnitTest>
+    <UnitTest name="BloodAvailability_HospitalCanCheckStock" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="80e175a8-28ea-5834-0786-2e9cf0362d21">
+      <Execution id="b3a39f85-6c1c-4aa0-8c4a-d95af511f1f2" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="BloodAvailability_HospitalCanCheckStock" />
+    </UnitTest>
+    <UnitTest name="BloodTypes_AllEightTypesExist" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="a29faa31-6106-8ba9-5b29-2a15d0f27754">
+      <Execution id="a27552fb-7e6b-4f07-8203-ad65f74b88e2" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="BloodTypes_AllEightTypesExist" />
+    </UnitTest>
+    <UnitTest name="AdminLogin_Success" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="afac70d1-fdd1-9967-9264-78ee963384ee">
+      <Execution id="2bdf55bf-7d19-4dd3-9115-f0bad89dfd62" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="AdminLogin_Success" />
+    </UnitTest>
+    <UnitTest name="BloodCompatibility_ABPositive_CanReceiveFromAll" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="3ce970dc-81a9-20d9-6187-f1f0b4475a6f">
+      <Execution id="c7be7143-2fe8-48ff-a3de-7c906544b802" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="BloodCompatibility_ABPositive_CanReceiveFromAll" />
+    </UnitTest>
+    <UnitTest name="HospitalDashboard_ShowsRequestStatistics" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="f8eea19b-4c1a-0d9e-32ee-0dba8aeb3a18">
+      <Execution id="7340cf90-56a1-4cb4-97c4-468c5f843491" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="HospitalDashboard_ShowsRequestStatistics" />
+    </UnitTest>
+    <UnitTest name="InvalidLogin_ShowsError" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="6d1cbda6-ded7-6f7a-55d8-0abca73bce6a">
+      <Execution id="ebd3792e-13b1-4b76-bd43-ae5d1024bab6" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="InvalidLogin_ShowsError" />
+    </UnitTest>
+    <UnitTest name="InventoryTracking_TracksActualTypeUsed" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="9b10f213-68d7-6f45-7f18-e54481a84712">
+      <Execution id="0872c3ef-a39f-4b7d-88bd-a85985a8c49a" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="InventoryTracking_TracksActualTypeUsed" />
+    </UnitTest>
+    <UnitTest name="DonationManagement_AdminCanApproveDonations" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="3939e763-44a6-ec3f-09f1-5623131f3555">
+      <Execution id="aad10a12-c4ce-4bc5-bc1f-6584d96c896f" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="DonationManagement_AdminCanApproveDonations" />
+    </UnitTest>
+    <UnitTest name="BloodRequest_HospitalCanCreateRequest" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="65f4ab37-8156-4b5c-b635-8f349aa56656">
+      <Execution id="98b7a170-86b1-4c2b-8570-e1d40dd47413" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="BloodRequest_HospitalCanCreateRequest" />
+    </UnitTest>
+    <UnitTest name="Reports_DisplaysAllStatistics" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="52e3b69f-ebf2-1c8a-b16d-1442431748e2">
+      <Execution id="b389e935-1752-4f58-bd40-b4882615a084" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="Reports_DisplaysAllStatistics" />
+    </UnitTest>
+    <UnitTest name="AdminDashboard_ShowsKeyMetrics" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="f2f8d047-aa8c-cf06-50a2-ba52486eb92f">
+      <Execution id="df42720d-27ae-44a8-a6df-085c6b00694d" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="AdminDashboard_ShowsKeyMetrics" />
+    </UnitTest>
+    <UnitTest name="BloodRequest_EmergencyRequestsAreHighlighted" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="b9413328-2528-50de-d393-65caca193767">
+      <Execution id="f6f8f9ac-2a9d-4ecd-9734-bf0c4beb84df" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="BloodRequest_EmergencyRequestsAreHighlighted" />
+    </UnitTest>
+    <UnitTest name="BloodCompatibility_OMinusPreservation" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="c5fee354-6300-0858-9ec3-0339234f82a5">
+      <Execution id="5874f3dc-de2b-4865-acc9-d470a5474a54" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="BloodCompatibility_OMinusPreservation" />
+    </UnitTest>
+    <UnitTest name="BloodAvailability_MatchesReportsPage" storage="c:\projects\c#\blooddonationsystem\bin\debug\net8.0\blooddonationsystem.dll" id="8d2e4a9b-b69f-fbc4-5563-b3ee202ce9b9">
+      <Execution id="424d5dd2-89e6-4d8a-ae0e-c1a3e6a7fe8d" />
+      <TestMethod codeBase="C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll" adapterTypeName="executor://nunit3testexecutor/" className="BloodDonationSystem.Tests.BloodDonationSystemTests" name="BloodAvailability_MatchesReportsPage" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6520592d-8b64-c02a-6f05-311f9f43529e" executionId="454be7b2-b9e8-40c8-88bb-ab663cba18a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="85118f22-f9d1-f5fe-8fc4-5e00bf6524ec" executionId="58a345c3-c2ca-4227-8ae1-d2549183b842" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b9413328-2528-50de-d393-65caca193767" executionId="f6f8f9ac-2a9d-4ecd-9734-bf0c4beb84df" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3ce970dc-81a9-20d9-6187-f1f0b4475a6f" executionId="c7be7143-2fe8-48ff-a3de-7c906544b802" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a29faa31-6106-8ba9-5b29-2a15d0f27754" executionId="a27552fb-7e6b-4f07-8203-ad65f74b88e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9b10f213-68d7-6f45-7f18-e54481a84712" executionId="0872c3ef-a39f-4b7d-88bd-a85985a8c49a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="52e3b69f-ebf2-1c8a-b16d-1442431748e2" executionId="b389e935-1752-4f58-bd40-b4882615a084" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3939e763-44a6-ec3f-09f1-5623131f3555" executionId="aad10a12-c4ce-4bc5-bc1f-6584d96c896f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f2f8d047-aa8c-cf06-50a2-ba52486eb92f" executionId="df42720d-27ae-44a8-a6df-085c6b00694d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c5fee354-6300-0858-9ec3-0339234f82a5" executionId="5874f3dc-de2b-4865-acc9-d470a5474a54" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d2e4a9b-b69f-fbc4-5563-b3ee202ce9b9" executionId="424d5dd2-89e6-4d8a-ae0e-c1a3e6a7fe8d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f8eea19b-4c1a-0d9e-32ee-0dba8aeb3a18" executionId="7340cf90-56a1-4cb4-97c4-468c5f843491" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cc84c73c-713a-3108-9789-f05535d01584" executionId="5e472be0-4de5-47a7-91ff-161b4d7417a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="65f4ab37-8156-4b5c-b635-8f349aa56656" executionId="98b7a170-86b1-4c2b-8570-e1d40dd47413" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7316fe2f-0cd8-8a04-a32f-9a0e6a7f4c01" executionId="8f9aa944-fcc1-47aa-8e24-721b66a70ad0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="afac70d1-fdd1-9967-9264-78ee963384ee" executionId="2bdf55bf-7d19-4dd3-9115-f0bad89dfd62" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="80e175a8-28ea-5834-0786-2e9cf0362d21" executionId="b3a39f85-6c1c-4aa0-8c4a-d95af511f1f2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d1cbda6-ded7-6f7a-55d8-0abca73bce6a" executionId="ebd3792e-13b1-4b76-bd43-ae5d1024bab6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="18" executed="18" passed="1" failed="17" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Playwright RunSettings Parsing Error: Playwright&gt;Timeout is not implemented&#xD;
+NUnit Adapter 4.5.0.0: Test execution started&#xD;
+Running all tests in C:\Projects\C#\BloodDonationSystem\bin\Debug\net8.0\BloodDonationSystem.dll&#xD;
+   NUnit3TestExecutor discovered 18 of 18 NUnit test cases using Current Discovery mode, Non-Explicit run&#xD;
+NUnit Adapter 4.5.0.0: Test execution complete&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

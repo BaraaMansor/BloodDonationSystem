@@ -49,7 +49,7 @@
                                         <td><h5><span class="badge bg-danger">@blood.BloodType</span></h5></td>
                                         <td>@blood.Description</td>
                                         <td>
-                                            <strong class="text-success">@blood.TotalQuantity ml</strong>
+                                            <strong class="text-success">@blood.AvailableQuantity ml</strong>
                                         </td>
                                     </tr>
                                 }
@@ -57,7 +57,7 @@
                             <tfoot class="table-light">
                                 <tr class="fw-bold">
                                     <td colspan="2">Total Available Stock</td>
-                                    <td class="text-success">@Model.Sum(b => b.TotalQuantity) ml</td>
+                                    <td class="text-success">@Model.Sum(b => b.AvailableQuantity) ml</td>
                                 </tr>
                             </tfoot>
                         </table>

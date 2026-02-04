@@ -119,44 +119,48 @@ namespace BloodDonationSystem.Controllers;
             return View(requests);
         }
 
-        // Blood Availability
         public async Task<IActionResult> BloodAvailability()
         {
-            // Get all completed donations grouped by blood type
             var completedDonations = await _context.Donations
                 .Include(d => d.Donor)
                     .ThenInclude(donor => donor.BloodType)
                 .Where(d => d.Status == "Completed")
-                .GroupBy(d => new { d.Donor.BloodType.Id, d.Donor.BloodType.TypeName, d.Donor.BloodType.Description })
-                .Select(g => new 
+                .Select(d => new
                 {
-                    BloodTypeId = g.Key.Id,
-                    BloodType = g.Key.TypeName,
-                    Description = g.Key.Description ?? string.Empty,
-                    TotalQuantity = g.Sum(d => d.Quantity)
+                    BloodTypeId = d.Donor.BloodType.Id,
+                    BloodTypeName = d.Donor.BloodType.TypeName,
+                    Description = d.Donor.BloodType.Description ?? string.Empty,
+                    Quantity = d.Quantity
                 })
                 .ToListAsync();
 
-            // Get fulfilled requests grouped by the ACTUAL blood type used (FulfilledWithBloodTypeId)
+            var groupedDonations = completedDonations
+                .GroupBy(d => new { d.BloodTypeId, d.BloodTypeName, d.Description })
+                .Select(g => new 
+                {
+                    BloodTypeId = g.Key.BloodTypeId,
+                    BloodType = g.Key.BloodTypeName,
+                    Description = g.Key.Description,
+                    TotalQuantity = g.Sum(d => d.Quantity)
+                })
+                .ToList();
+
             var fulfilledRequests = await _context.BloodRequests
                 .Where(r => r.Status == "Fulfilled" && r.FulfilledWithBloodTypeId.HasValue)
-                .GroupBy(r => r.FulfilledWithBloodTypeId.Value)
+                .GroupBy(r => r.FulfilledWithBloodTypeId!.Value)
                 .Select(g => new
                 {
                     BloodTypeId = g.Key,
-                    FulfilledQuantity = g.Sum(r => r.Quantity)
+                    FulfilledQuantity = g.Sum(r => (int?)r.Quantity) ?? 0
                 })
                 .ToListAsync();
 
-            // Calculate available stock (donations - fulfilled requests)
-            var bloodAvailability = completedDonations
+            var bloodAvailability = groupedDonations
                 .Select(d => new BloodAvailabilityViewModel
                 {
                     BloodType = d.BloodType,
                     Description = d.Description,
-                    AvailableUnits = 0, // Not used anymore
-                    TotalQuantity = d.TotalQuantity - (fulfilledRequests.FirstOrDefault(f => f.BloodTypeId == d.BloodTypeId)?.FulfilledQuantity ?? 0),
-                    AvailableDonors = 0 // Not used anymore
+                    AvailableQuantity = d.TotalQuantity - (fulfilledRequests.FirstOrDefault(f => f.BloodTypeId == d.BloodTypeId)?.FulfilledQuantity ?? 0)
                 })
                 .OrderBy(b => b.BloodType)
                 .ToList();
@@ -214,7 +218,5 @@ namespace BloodDonationSystem.Controllers;
     {
         public string BloodType { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public int AvailableUnits { get; set; }
-        public int TotalQuantity { get; set; }
-        public int AvailableDonors { get; set; }
+        public int AvailableQuantity { get; set; }
     }
