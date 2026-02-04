@@ -70,8 +70,8 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label asp-for="BloodTypeId" class="form-label">Blood Type</label>
-                                <select asp-for="BloodTypeId" class="form-select">
+                                <label asp-for="BloodTypeId" class="form-label">Blood Type <span class="text-danger">*</span></label>
+                                <select asp-for="BloodTypeId" class="form-select" required>
                                     <option value="">Select Blood Type</option>
                                     @foreach (var bloodType in (ViewBag.BloodTypes as List<BloodType>)!)
                                     {
@@ -128,8 +128,12 @@
             function toggleDonorFields() {
                 if ($('#roleDonor').is(':checked')) {
                     $('#donorFields').show();
+                    // Make blood type required for donors
+                    $('#BloodTypeId').attr('required', 'required');
                 } else {
                     $('#donorFields').hide();
+                    // Remove required attribute for hospitals
+                    $('#BloodTypeId').removeAttr('required');
                 }
             }
 

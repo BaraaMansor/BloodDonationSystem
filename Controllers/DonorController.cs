@@ -1,33 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BloodDonationSystem.Data;
 using BloodDonationSystem.Models;
 using BloodDonationSystem.Attributes;
 using BloodDonationSystem.Helpers;
+using BloodDonationSystem.Services.ApplicationServices;
 using System.ComponentModel.DataAnnotations;
 
 namespace BloodDonationSystem.Controllers;
     [AuthorizeRole("Donor")]
-    public class DonorController : Controller
+    public class DonorController(DonorService donorService) : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DonorService _donorService = donorService;
 
-        public DonorController(ApplicationDbContext context)
+    // Dashboard
+    public IActionResult Dashboard()
         {
-            _context = context;
-        }
+            var userId = HttpContext.Session.GetUserId() ?? 0;
+            var data = _donorService.GetDashboardData(userId);
 
-        // Dashboard
-        public IActionResult Dashboard()
-        {
-            var userId = HttpContext.Session.GetUserId();
-            var donor = _context.Donors
-                .Include(d => d.User)
-                .Include(d => d.BloodType)
-                .Include(d => d.Donations)
-                .FirstOrDefault(d => d.UserId == userId);
-
-            if (donor == null)
+            if (data == null)
             {
                 TempData["ErrorMessage"] = "Donor profile not found.";
                 return RedirectToAction("Index", "Home");
@@ -35,16 +25,14 @@ namespace BloodDonationSystem.Controllers;
 
             var model = new DonorDashboardViewModel
             {
-                Donor = donor,
-                TotalDonations = donor.Donations.Count,
-                CompletedDonations = donor.Donations.Count(d => d.Status == "Completed"),
-                PendingDonations = donor.Donations.Count(d => d.Status == "Pending"),
-                LastDonationDate = donor.LastDonationDate,
-                CanDonateAgain = !donor.LastDonationDate.HasValue || 
-                                (DateTime.Now - donor.LastDonationDate.Value).TotalDays >= 90,
-                DaysUntilEligible = donor.LastDonationDate.HasValue ? 
-                                    Math.Max(0, 90 - (int)(DateTime.Now - donor.LastDonationDate.Value).TotalDays) : 0,
-                RecentDonations = donor.Donations.OrderByDescending(d => d.DonationDate).ToList()
+                Donor = data.Donor,
+                TotalDonations = data.TotalDonations,
+                CompletedDonations = data.CompletedDonations,
+                PendingDonations = data.PendingDonations,
+                LastDonationDate = data.LastDonationDate,
+                CanDonateAgain = data.CanDonateAgain,
+                DaysUntilEligible = data.DaysUntilEligible,
+                RecentDonations = data.RecentDonations
             };
 
             return View(model);
@@ -53,11 +41,8 @@ namespace BloodDonationSystem.Controllers;
         // View Profile
         public IActionResult Profile()
         {
-            var userId = HttpContext.Session.GetUserId();
-            var donor = _context.Donors
-                .Include(d => d.User)
-                .Include(d => d.BloodType)
-                .FirstOrDefault(d => d.UserId == userId);
+            var userId = HttpContext.Session.GetUserId() ?? 0;
+            var donor = _donorService.GetDonorProfile(userId);
 
             if (donor == null)
             {
@@ -71,11 +56,8 @@ namespace BloodDonationSystem.Controllers;
         // GET: Edit Profile
         public IActionResult EditProfile()
         {
-            var userId = HttpContext.Session.GetUserId();
-            var donor = _context.Donors
-                .Include(d => d.User)
-                .Include(d => d.BloodType)
-                .FirstOrDefault(d => d.UserId == userId);
+            var userId = HttpContext.Session.GetUserId() ?? 0;
+            var donor = _donorService.GetDonorWithUser(userId);
 
             if (donor == null)
             {
@@ -102,32 +84,26 @@ namespace BloodDonationSystem.Controllers;
         {
             if (ModelState.IsValid)
             {
-                var userId = HttpContext.Session.GetUserId();
-                var donor = _context.Donors
-                    .Include(d => d.User)
-                    .FirstOrDefault(d => d.UserId == userId);
+                var userId = HttpContext.Session.GetUserId() ?? 0;
+                var result = _donorService.UpdateProfile(
+                    userId,
+                    model.FullName,
+                    model.Phone,
+                    model.Address,
+                    model.Gender,
+                    model.MedicalNotes
+                );
 
-                if (donor == null)
+                if (!result.Success)
                 {
-                    TempData["ErrorMessage"] = "Donor profile not found.";
+                    TempData["ErrorMessage"] = result.Message;
                     return RedirectToAction("Dashboard");
                 }
 
-                // Update user info
-                donor.User.FullName = model.FullName;
-                donor.User.Phone = model.Phone;
-
-                // Update donor info
-                donor.Address = model.Address;
-                donor.Gender = model.Gender;
-                donor.MedicalNotes = model.MedicalNotes;
-
-                _context.SaveChanges();
-
                 // Update session name if changed
-                HttpContext.Session.SetString("UserName", model.FullName);
+                HttpContext.Session.SetString("UserName", result.Data!);
 
-                TempData["SuccessMessage"] = "Profile updated successfully.";
+                TempData["SuccessMessage"] = result.Message;
                 return RedirectToAction("Profile");
             }
 
@@ -137,28 +113,17 @@ namespace BloodDonationSystem.Controllers;
         // GET: Create Donation
         public IActionResult CreateDonation()
         {
-            var userId = HttpContext.Session.GetUserId();
-            var donor = _context.Donors
-                .Include(d => d.BloodType)
-                .FirstOrDefault(d => d.UserId == userId);
+            var userId = HttpContext.Session.GetUserId() ?? 0;
+            var eligibility = _donorService.CheckDonationEligibility(userId);
 
-            if (donor == null)
+            if (!eligibility.IsEligible)
             {
-                TempData["ErrorMessage"] = "Donor profile not found.";
+                if (eligibility.ErrorMessage == "Donor profile not found.")
+                    TempData["ErrorMessage"] = eligibility.ErrorMessage;
                 return RedirectToAction("Dashboard");
             }
 
-            // Check if donor can donate
-            if (donor.LastDonationDate.HasValue)
-            {
-                var daysSinceLastDonation = (DateTime.Now - donor.LastDonationDate.Value).TotalDays;
-                if (daysSinceLastDonation < 90)
-                {
-                    return RedirectToAction("Dashboard");
-                }
-            }
-
-            ViewBag.BloodType = donor.BloodType.TypeName;
+            ViewBag.BloodType = eligibility.BloodTypeName;
             return View(new CreateDonationViewModel());
         }
 
@@ -169,81 +134,41 @@ namespace BloodDonationSystem.Controllers;
         {
             if (ModelState.IsValid)
             {
-                var userId = HttpContext.Session.GetUserId();
-                var donor = _context.Donors.FirstOrDefault(d => d.UserId == userId);
+                var userId = HttpContext.Session.GetUserId() ?? 0;
+                var result = _donorService.CreateDonation(
+                    userId,
+                    model.DonationDate,
+                    model.Quantity,
+                    model.Notes
+                );
 
-                if (donor == null)
-                {
-                    TempData["ErrorMessage"] = "Donor profile not found.";
-                    return RedirectToAction("Dashboard");
-                }
+                if (result.Success)
+                    TempData["SuccessMessage"] = result.Message;
+                else
+                    TempData["ErrorMessage"] = result.Message;
 
-                // Double-check eligibility
-                if (donor.LastDonationDate.HasValue)
-                {
-                    var daysSinceLastDonation = (DateTime.Now - donor.LastDonationDate.Value).TotalDays;
-                    if (daysSinceLastDonation < 90)
-                    {
-                        TempData["ErrorMessage"] = "You are not eligible to donate yet.";
-                        return RedirectToAction("Dashboard");
-                    }
-                }
-
-                var donation = new Donation
-                {
-                    DonorId = donor.Id,
-                    DonationDate = model.DonationDate,
-                    Quantity = model.Quantity,
-                    Notes = model.Notes,
-                    Status = "Pending",
-                    CreatedAt = DateTime.Now
-                };
-
-                _context.Donations.Add(donation);
-                _context.SaveChanges();
-
-                TempData["SuccessMessage"] = "Donation request submitted successfully. Please wait for admin approval.";
                 return RedirectToAction("Dashboard");
             }
 
-            var userId2 = HttpContext.Session.GetUserId();
-            var donor2 = _context.Donors.Include(d => d.BloodType).FirstOrDefault(d => d.UserId == userId2);
-            ViewBag.BloodType = donor2?.BloodType.TypeName;
+            var userId2 = HttpContext.Session.GetUserId() ?? 0;
+            var eligibility = _donorService.CheckDonationEligibility(userId2);
+            ViewBag.BloodType = eligibility.BloodTypeName;
 
             return View(model);
         }
 
-        // Donation History
         // Toggle Availability
         [HttpPost]
         public IActionResult ToggleAvailability()
         {
-            var userId = HttpContext.Session.GetUserId();
-            var donor = _context.Donors.FirstOrDefault(d => d.UserId == userId);
+            var userId = HttpContext.Session.GetUserId() ?? 0;
+            var result = _donorService.ToggleAvailability(userId);
 
-            if (donor == null)
-            {
-                TempData["ErrorMessage"] = "Donor profile not found.";
-                return RedirectToAction("Dashboard");
-            }
+            if (result.Success)
+                TempData["SuccessMessage"] = result.Message;
+            else
+                TempData["ErrorMessage"] = result.Message;
 
-            // If trying to mark as available, check eligibility
-            if (!donor.IsAvailable)
-            {
-                var canDonate = !donor.LastDonationDate.HasValue || 
-                               (DateTime.Now - donor.LastDonationDate.Value).TotalDays >= 90;
-                
-                if (!canDonate)
-                {
-                    var daysUntilEligible = 90 - (int)(DateTime.Now - donor.LastDonationDate!.Value).TotalDays;
-                    return RedirectToAction("Dashboard");
-                }
-            }
-
-            donor.IsAvailable = !donor.IsAvailable;
-            _context.SaveChanges();
-
-            TempData["SuccessMessage"] = $"Your availability has been updated to {(donor.IsAvailable ? "Available" : "Not Available")}.";
             return RedirectToAction("Dashboard");
         }
     }

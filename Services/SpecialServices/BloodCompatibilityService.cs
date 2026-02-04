@@ -1,4 +1,4 @@
-namespace BloodDonationSystem.Services;
+namespace BloodDonationSystem.Services.SpecialServices;
 
 public class BloodCompatibilityService
 {

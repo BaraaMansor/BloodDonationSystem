@@ -2,7 +2,7 @@ using BloodDonationSystem.Data;
 using BloodDonationSystem.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BloodDonationSystem.Services
+namespace BloodDonationSystem.Services.SpecialServices
 {
     public class BloodInventoryService
     {

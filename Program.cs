@@ -1,5 +1,6 @@
 using BloodDonationSystem.Data;
-using BloodDonationSystem.Services;
+using BloodDonationSystem.Services.SpecialServices;
+using BloodDonationSystem.Services.ApplicationServices;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,10 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ExcelExportService>();
 builder.Services.AddScoped<BloodCompatibilityService>();
 builder.Services.AddScoped<BloodInventoryService>();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<AdminService>();
+builder.Services.AddScoped<DonorService>();
+builder.Services.AddScoped<HospitalService>();
 
 var app = builder.Build();
 

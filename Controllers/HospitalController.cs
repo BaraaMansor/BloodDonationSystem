@@ -1,66 +1,34 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BloodDonationSystem.Data;
 using BloodDonationSystem.Models;
 using BloodDonationSystem.Attributes;
 using BloodDonationSystem.Helpers;
-using BloodDonationSystem.Services;
+using BloodDonationSystem.Services.ApplicationServices;
 using System.ComponentModel.DataAnnotations;
 
 namespace BloodDonationSystem.Controllers;
     [AuthorizeRole("Hospital")]
-    public class HospitalController : Controller
+    public class HospitalController(HospitalService hospitalService) : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly BloodInventoryService _inventoryService;
+        private readonly HospitalService _hospitalService = hospitalService;
 
-        public HospitalController(ApplicationDbContext context, BloodInventoryService inventoryService)
+    // Dashboard
+    public async Task<IActionResult> Dashboard()
         {
-            _context = context;
-            _inventoryService = inventoryService;
-        }
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var data = await _hospitalService.GetDashboardDataAsync(userId);
 
-        // Dashboard
-        public async Task<IActionResult> Dashboard()
-        {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            var user = await _context.Users.FindAsync(userId);
-
-            if (user == null)
+            if (data == null)
                 return RedirectToAction("Login", "Account");
-
-            var totalRequests = await _context.BloodRequests
-                .Where(r => r.RequestedBy == userId)
-                .CountAsync();
-
-            var pendingRequests = await _context.BloodRequests
-                .Where(r => r.RequestedBy == userId && r.Status == "Pending")
-                .CountAsync();
-
-            var approvedRequests = await _context.BloodRequests
-                .Where(r => r.RequestedBy == userId && r.Status == "Approved")
-                .CountAsync();
-
-            var fulfilledRequests = await _context.BloodRequests
-                .Where(r => r.RequestedBy == userId && r.Status == "Fulfilled")
-                .CountAsync();
-
-            var recentRequests = await _context.BloodRequests
-                .Include(r => r.BloodType)
-                .Where(r => r.RequestedBy == userId)
-                .OrderByDescending(r => r.RequestDate)
-                .Take(5)
-                .ToListAsync();
 
             var viewModel = new HospitalDashboardViewModel
             {
-                HospitalName = user.FullName,
-                Email = user.Email,
-                TotalRequests = totalRequests,
-                PendingRequests = pendingRequests,
-                ApprovedRequests = approvedRequests,
-                FulfilledRequests = fulfilledRequests,
-                RecentRequests = recentRequests
+                HospitalName = data.HospitalName,
+                Email = data.Email,
+                TotalRequests = data.TotalRequests,
+                PendingRequests = data.PendingRequests,
+                ApprovedRequests = data.ApprovedRequests,
+                FulfilledRequests = data.FulfilledRequests,
+                RecentRequests = data.RecentRequests
             };
 
             return View(viewModel);
@@ -69,7 +37,7 @@ namespace BloodDonationSystem.Controllers;
         // GET: Create Blood Request
         public async Task<IActionResult> CreateRequest()
         {
-            var bloodTypes = await _context.BloodTypes.ToListAsync();
+            var bloodTypes = await _hospitalService.GetBloodTypesAsync();
             ViewBag.BloodTypes = bloodTypes;
             return View();
         }
@@ -81,29 +49,25 @@ namespace BloodDonationSystem.Controllers;
         {
             if (ModelState.IsValid)
             {
-                var userId = HttpContext.Session.GetInt32("UserId");
-                var user = await _context.Users.FindAsync(userId);
-                
-                var request = new BloodRequest
+                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+                var result = await _hospitalService.CreateBloodRequestAsync(
+                    userId,
+                    model.BloodTypeId,
+                    model.QuantityRequired,
+                    model.Notes,
+                    model.IsEmergency
+                );
+
+                if (result.Success)
                 {
-                    BloodTypeId = model.BloodTypeId,
-                    RequestedBy = userId!.Value,
-                    Quantity = model.QuantityRequired,
-                    HospitalName = user!.FullName,
-                    Notes = model.Notes,
-                    IsEmergency = model.IsEmergency,
-                    Status = "Pending",
-                    RequestDate = DateTime.Now
-                };
+                    TempData["SuccessMessage"] = $"{result.Message} Request ID: {result.Data}";
+                    return RedirectToAction("Dashboard");
+                }
 
-                _context.BloodRequests.Add(request);
-                await _context.SaveChangesAsync();
-
-                TempData["SuccessMessage"] = "Blood request submitted successfully! Request ID: " + request.Id;
-                return RedirectToAction("Dashboard");
+                TempData["ErrorMessage"] = result.Message;
             }
 
-            var bloodTypes = await _context.BloodTypes.ToListAsync();
+            var bloodTypes = await _hospitalService.GetBloodTypesAsync();
             ViewBag.BloodTypes = bloodTypes;
             return View(model);
         }
@@ -111,29 +75,22 @@ namespace BloodDonationSystem.Controllers;
         // Request History
         public async Task<IActionResult> RequestHistory()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-
-            var requests = await _context.BloodRequests
-                .Include(r => r.BloodType)
-                .Where(r => r.RequestedBy == userId)
-                .OrderByDescending(r => r.RequestDate)
-                .ToListAsync();
-
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var requests = await _hospitalService.GetRequestHistoryAsync(userId);
             return View(requests);
         }
 
         public IActionResult BloodAvailability()
         {
-            var bloodAvailability = _inventoryService.GetBloodTypeDistribution();
+            var bloodAvailability = _hospitalService.GetBloodAvailability();
 
             var viewModels = bloodAvailability
                 .Select(b => new BloodAvailabilityViewModel
                 {
-                    BloodType = b.BloodTypeName,
-                    Description = b.Description ?? string.Empty,
-                    AvailableQuantity = b.AvailableML
+                    BloodType = b.BloodType,
+                    Description = b.Description,
+                    AvailableQuantity = b.AvailableQuantity
                 })
-                .OrderBy(b => b.BloodType)
                 .ToList();
 
             return View(viewModels);
@@ -142,11 +99,8 @@ namespace BloodDonationSystem.Controllers;
         // Request Details
         public async Task<IActionResult> RequestDetails(int id)
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-
-            var request = await _context.BloodRequests
-                .Include(r => r.BloodType)
-                .FirstOrDefaultAsync(r => r.Id == id && r.RequestedBy == userId);
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var request = await _hospitalService.GetRequestDetailsAsync(userId, id);
 
             if (request == null)
                 return NotFound();

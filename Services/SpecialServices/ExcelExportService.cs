@@ -3,7 +3,7 @@ using OfficeOpenXml.Style;
 using System.Drawing;
 using BloodDonationSystem.Controllers;
 
-namespace BloodDonationSystem.Services;
+namespace BloodDonationSystem.Services.SpecialServices;
 
 public class ExcelExportService
 {
