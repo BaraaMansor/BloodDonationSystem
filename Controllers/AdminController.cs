@@ -13,21 +13,24 @@ namespace BloodDonationSystem.Controllers;
         private readonly ApplicationDbContext _context;
         private readonly ExcelExportService _excelService;
         private readonly BloodCompatibilityService _bloodCompatibility;
+        private readonly BloodInventoryService _inventoryService;
 
-        public AdminController(ApplicationDbContext context, ExcelExportService excelService, BloodCompatibilityService bloodCompatibility)
+        public AdminController(ApplicationDbContext context, ExcelExportService excelService, BloodCompatibilityService bloodCompatibility, BloodInventoryService inventoryService)
         {
             _context = context;
             _excelService = excelService;
             _bloodCompatibility = bloodCompatibility;
+            _inventoryService = inventoryService;
         }
 
         // Dashboard
         public IActionResult Dashboard()
         {
+            var summary = _inventoryService.GetInventorySummary();
+
             var model = new AdminDashboardViewModel
             {
-                TotalBloodStock = _context.Donations.Where(d => d.Status == "Completed").Sum(d => (int?)d.Quantity) ?? 0 - 
-                                  _context.BloodRequests.Where(r => r.Status == "Fulfilled").Sum(r => (int?)r.Quantity) ?? 0,
+                TotalBloodStock = summary.TotalAvailableML,  // Use available, not collected
                 TotalDonations = _context.Donations.Count(),
                 PendingDonations = _context.Donations.Count(d => d.Status == "Pending"),
                 ApprovedDonations = _context.Donations.Count(d => d.Status == "Approved"),
@@ -276,16 +279,8 @@ namespace BloodDonationSystem.Controllers;
                 
                 var bloodTypeId = bloodTypeMap[bloodTypeName];
 
-                // Calculate available quantity for this specific blood type
-                var donated = _context.Donations
-                    .Where(d => d.Donor.BloodTypeId == bloodTypeId && d.Status == "Completed")
-                    .Sum(d => (int?)d.Quantity) ?? 0;
-
-                var fulfilled = _context.BloodRequests
-                    .Where(r => r.FulfilledWithBloodTypeId == bloodTypeId && r.Status == "Fulfilled")
-                    .Sum(r => (int?)r.Quantity) ?? 0;
-
-                var available = donated - fulfilled;
+                // Get available quantity for this specific blood type using the service
+                var available = _inventoryService.GetAvailableStockByBloodType(bloodTypeId);
 
                 if (available >= request.Quantity)
                 {
@@ -301,17 +296,8 @@ namespace BloodDonationSystem.Controllers;
             {
                 var compatibleBloodTypeIds = bloodTypeMap.Values.ToList();
                 
-                var totalDonated = _context.Donations
-                    .Where(d => compatibleBloodTypeIds.Contains(d.Donor.BloodTypeId) && d.Status == "Completed")
-                    .Sum(d => (int?)d.Quantity) ?? 0;
-
-                var totalFulfilled = _context.BloodRequests
-                    .Where(r => r.FulfilledWithBloodTypeId.HasValue && 
-                               compatibleBloodTypeIds.Contains(r.FulfilledWithBloodTypeId.Value) && 
-                               r.Status == "Fulfilled")
-                    .Sum(r => (int?)r.Quantity) ?? 0;
-
-                var totalAvailable = totalDonated - totalFulfilled;
+                var totalAvailable = compatibleBloodTypeIds
+                    .Sum(btId => _inventoryService.GetAvailableStockByBloodType(btId));
 
                 TempData["ErrorMessage"] = $"Insufficient compatible blood! Available: {totalAvailable}ml, Requested: {request.Quantity}ml. Need {request.Quantity - totalAvailable}ml more. Compatible types: {string.Join(", ", compatibleBloodTypes)}";
                 return RedirectToAction("BloodRequests");
@@ -333,45 +319,29 @@ namespace BloodDonationSystem.Controllers;
         // Reports
         public IActionResult Reports()
         {
-            var fulfilledByActualType = _context.BloodRequests
-                .Where(r => r.Status == "Fulfilled" && r.FulfilledWithBloodTypeId.HasValue)
-                .GroupBy(r => r.FulfilledWithBloodTypeId!.Value)
-                .Select(g => new { BloodTypeId = g.Key, FulfilledQuantity = g.Sum(r => (int?)r.Quantity) ?? 0 })
-                .ToDictionary(x => x.BloodTypeId, x => x.FulfilledQuantity);
-
-            var bloodTypeDistribution = _context.BloodTypes
-                .Select(bt => new 
-                {
-                    BloodTypeId = bt.Id,
-                    BloodType = bt.TypeName,
-                    DonorCount = bt.Donors.Count(),
-                    CompletedDonations = bt.Donors.SelectMany(d => d.Donations).Count(d => d.Status == "Completed"),
-                    TotalQuantity = bt.Donors.SelectMany(d => d.Donations).Where(d => d.Status == "Completed").Sum(d => (int?)d.Quantity) ?? 0,
-                    PendingRequests = bt.BloodRequests.Count(r => r.Status == "Pending" || r.Status == "Approved"),
-                    RequestedQuantity = bt.BloodRequests.Where(r => r.Status == "Pending" || r.Status == "Approved").Sum(r => (int?)r.Quantity) ?? 0
-                })
-                .ToList()
-                .Select(bt => new BloodTypeDistributionViewModel
-                {
-                    BloodType = bt.BloodType,
-                    DonorCount = bt.DonorCount,
-                    CompletedDonations = bt.CompletedDonations,
-                    TotalQuantity = bt.TotalQuantity,
-                    FulfilledQuantity = fulfilledByActualType.GetValueOrDefault(bt.BloodTypeId, 0),
-                    PendingRequests = bt.PendingRequests,
-                    RequestedQuantity = bt.RequestedQuantity
-                })
-                .ToList();
+            var bloodTypeStats = _inventoryService.GetBloodTypeDistribution();
+            var summary = _inventoryService.GetInventorySummary();
 
             var model = new ReportsViewModel
             {
-                TotalDonors = _context.Donors.Count(),
-                ActiveDonors = _context.Donors.Count(d => d.IsAvailable),
+                TotalDonors = summary.TotalDonors,
+                ActiveDonors = summary.ActiveDonors,
                 TotalDonations = _context.Donations.Count(),
-                CompletedDonations = _context.Donations.Count(d => d.Status == "Completed"),
-                TotalBloodRequests = _context.BloodRequests.Count(),
-                FulfilledRequests = _context.BloodRequests.Count(r => r.Status == "Fulfilled"),
-                BloodTypeDistribution = bloodTypeDistribution,
+                CompletedDonations = summary.TotalDonations,
+                TotalBloodRequests = summary.TotalRequests,
+                FulfilledRequests = summary.FulfilledRequests,
+                BloodTypeDistribution = bloodTypeStats.Select(stat => new BloodTypeDistributionViewModel
+                {
+                    BloodType = stat.BloodTypeName,
+                    DonorCount = stat.DonorCount,
+                    CompletedDonations = stat.CompletedDonations,
+                    TotalQuantity = stat.TotalCollectedML,
+                    FulfilledQuantity = stat.FulfilledRequestsML,
+                    AvailableQuantity = stat.AvailableML,
+                    PendingRequests = stat.PendingRequestCount,
+                    RequestedQuantity = stat.PendingRequestQuantityML,
+                    Status = stat.GetStatus()
+                }).ToList(),
                 MonthlyDonations = [.. _context.Donations
                     .Where(d => d.Status == "Completed")
                     .GroupBy(d => new { d.DonationDate.Year, d.DonationDate.Month })
@@ -398,25 +368,29 @@ namespace BloodDonationSystem.Controllers;
 
         public IActionResult ExportReports()
         {
+            var bloodTypeStats = _inventoryService.GetBloodTypeDistribution();
+            var summary = _inventoryService.GetInventorySummary();
+
             var model = new ReportsViewModel
             {
-                TotalDonors = _context.Donors.Count(),
-                ActiveDonors = _context.Donors.Count(d => d.IsAvailable),
+                TotalDonors = summary.TotalDonors,
+                ActiveDonors = summary.ActiveDonors,
                 TotalDonations = _context.Donations.Count(),
-                CompletedDonations = _context.Donations.Count(d => d.Status == "Completed"),
-                TotalBloodRequests = _context.BloodRequests.Count(),
-                FulfilledRequests = _context.BloodRequests.Count(r => r.Status == "Fulfilled"),
-                BloodTypeDistribution = _context.BloodTypes
-                    .Select(bt => new BloodTypeDistributionViewModel
-                    {
-                        BloodType = bt.TypeName,
-                        DonorCount = bt.Donors.Count(),
-                        CompletedDonations = bt.Donors.SelectMany(d => d.Donations).Count(d => d.Status == "Completed"),
-                        TotalQuantity = bt.Donors.SelectMany(d => d.Donations).Where(d => d.Status == "Completed").Sum(d => d.Quantity),
-                        FulfilledQuantity = bt.BloodRequests.Where(r => r.Status == "Fulfilled").Sum(r => r.Quantity),
-                        PendingRequests = bt.BloodRequests.Count(r => r.Status == "Pending" || r.Status == "Approved"),
-                        RequestedQuantity = bt.BloodRequests.Where(r => r.Status == "Pending" || r.Status == "Approved").Sum(r => r.Quantity)
-                    }).ToList(),
+                CompletedDonations = summary.TotalDonations,
+                TotalBloodRequests = summary.TotalRequests,
+                FulfilledRequests = summary.FulfilledRequests,
+                BloodTypeDistribution = bloodTypeStats.Select(stat => new BloodTypeDistributionViewModel
+                {
+                    BloodType = stat.BloodTypeName,
+                    DonorCount = stat.DonorCount,
+                    CompletedDonations = stat.CompletedDonations,
+                    TotalQuantity = stat.TotalCollectedML,
+                    FulfilledQuantity = stat.FulfilledRequestsML,
+                    AvailableQuantity = stat.AvailableML,
+                    PendingRequests = stat.PendingRequestCount,
+                    RequestedQuantity = stat.PendingRequestQuantityML,
+                    Status = stat.GetStatus()
+                }).ToList(),
                 MonthlyDonations = [.. _context.Donations
                     .Where(d => d.Status == "Completed")
                     .GroupBy(d => new { d.DonationDate.Year, d.DonationDate.Month })
@@ -487,9 +461,10 @@ namespace BloodDonationSystem.Controllers;
         public int CompletedDonations { get; set; }
         public int TotalQuantity { get; set; }
         public int FulfilledQuantity { get; set; }
-        public int AvailableQuantity => TotalQuantity - FulfilledQuantity;
+        public int AvailableQuantity { get; set; }
         public int PendingRequests { get; set; }
         public int RequestedQuantity { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 
     public class MonthlyStatViewModel

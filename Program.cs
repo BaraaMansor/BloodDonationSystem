@@ -22,11 +22,10 @@ builder.Services.AddSession(options =>
 // Add HttpContextAccessor for session access
 builder.Services.AddHttpContextAccessor();
 
-// Add Excel Export Service
+// Add Services
 builder.Services.AddScoped<ExcelExportService>();
-
-// Add Blood Compatibility Service
 builder.Services.AddScoped<BloodCompatibilityService>();
+builder.Services.AddScoped<BloodInventoryService>();
 
 var app = builder.Build();
 

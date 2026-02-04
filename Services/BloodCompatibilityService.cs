@@ -15,11 +15,6 @@ public class BloodCompatibilityService
         { "AB+", new List<string> { "O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+" } } // Universal recipient
     };
 
-    /// <summary>
-    /// Gets all blood types that can donate to the specified recipient blood type
-    /// </summary>
-    /// <param name="recipientBloodType">The blood type of the recipient</param>
-    /// <returns>List of compatible donor blood types</returns>
     public List<string> GetCompatibleDonors(string recipientBloodType)
     {
         if (CompatibilityMap.TryGetValue(recipientBloodType, out var compatibleDonors))
@@ -31,12 +26,6 @@ public class BloodCompatibilityService
         return new List<string>();
     }
 
-    /// <summary>
-    /// Checks if donor blood type is compatible with recipient blood type
-    /// </summary>
-    /// <param name="donorBloodType">The blood type of the donor</param>
-    /// <param name="recipientBloodType">The blood type of the recipient</param>
-    /// <returns>True if compatible, false otherwise</returns>
     public bool IsCompatible(string donorBloodType, string recipientBloodType)
     {
         if (CompatibilityMap.TryGetValue(recipientBloodType, out var compatibleDonors))
@@ -47,12 +36,6 @@ public class BloodCompatibilityService
         return false;
     }
 
-    /// <summary>
-    /// Gets the priority order of blood types to use when fulfilling a request.
-    /// Exact match gets highest priority, then by scarcity (rarer types first to preserve common types)
-    /// </summary>
-    /// <param name="requestedBloodType">The blood type requested</param>
-    /// <returns>Ordered list of blood types to check</returns>
     public List<string> GetFulfillmentPriority(string requestedBloodType)
     {
         var compatibleTypes = GetCompatibleDonors(requestedBloodType);

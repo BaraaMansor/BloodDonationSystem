@@ -4,6 +4,7 @@ using BloodDonationSystem.Data;
 using BloodDonationSystem.Models;
 using BloodDonationSystem.Attributes;
 using BloodDonationSystem.Helpers;
+using BloodDonationSystem.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace BloodDonationSystem.Controllers;
@@ -11,10 +12,12 @@ namespace BloodDonationSystem.Controllers;
     public class HospitalController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly BloodInventoryService _inventoryService;
 
-        public HospitalController(ApplicationDbContext context)
+        public HospitalController(ApplicationDbContext context, BloodInventoryService inventoryService)
         {
             _context = context;
+            _inventoryService = inventoryService;
         }
 
         // Dashboard
@@ -119,53 +122,21 @@ namespace BloodDonationSystem.Controllers;
             return View(requests);
         }
 
-        public async Task<IActionResult> BloodAvailability()
+        public IActionResult BloodAvailability()
         {
-            var completedDonations = await _context.Donations
-                .Include(d => d.Donor)
-                    .ThenInclude(donor => donor.BloodType)
-                .Where(d => d.Status == "Completed")
-                .Select(d => new
-                {
-                    BloodTypeId = d.Donor.BloodType.Id,
-                    BloodTypeName = d.Donor.BloodType.TypeName,
-                    Description = d.Donor.BloodType.Description ?? string.Empty,
-                    Quantity = d.Quantity
-                })
-                .ToListAsync();
+            var bloodAvailability = _inventoryService.GetBloodTypeDistribution();
 
-            var groupedDonations = completedDonations
-                .GroupBy(d => new { d.BloodTypeId, d.BloodTypeName, d.Description })
-                .Select(g => new 
+            var viewModels = bloodAvailability
+                .Select(b => new BloodAvailabilityViewModel
                 {
-                    BloodTypeId = g.Key.BloodTypeId,
-                    BloodType = g.Key.BloodTypeName,
-                    Description = g.Key.Description,
-                    TotalQuantity = g.Sum(d => d.Quantity)
-                })
-                .ToList();
-
-            var fulfilledRequests = await _context.BloodRequests
-                .Where(r => r.Status == "Fulfilled" && r.FulfilledWithBloodTypeId.HasValue)
-                .GroupBy(r => r.FulfilledWithBloodTypeId!.Value)
-                .Select(g => new
-                {
-                    BloodTypeId = g.Key,
-                    FulfilledQuantity = g.Sum(r => (int?)r.Quantity) ?? 0
-                })
-                .ToListAsync();
-
-            var bloodAvailability = groupedDonations
-                .Select(d => new BloodAvailabilityViewModel
-                {
-                    BloodType = d.BloodType,
-                    Description = d.Description,
-                    AvailableQuantity = d.TotalQuantity - (fulfilledRequests.FirstOrDefault(f => f.BloodTypeId == d.BloodTypeId)?.FulfilledQuantity ?? 0)
+                    BloodType = b.BloodTypeName,
+                    Description = b.Description ?? string.Empty,
+                    AvailableQuantity = b.AvailableML
                 })
                 .OrderBy(b => b.BloodType)
                 .ToList();
 
-            return View(bloodAvailability);
+            return View(viewModels);
         }
 
         // Request Details
