@@ -18,6 +18,11 @@ A comprehensive ASP.NET MVC application for managing blood donation activities b
 - Bootstrap 5
 - Font Awesome Icons
 
+## Workflow
+
+- Made architecture and developed each feature, then refactored it using AI to achieve professional standards
+- The only AI only folder: the special services folder was built with complete in depth and detailed AI prompts to solve problems that otherwise would take an annoying amount of time.
+
 ## Getting Started
 
 ### Prerequisites

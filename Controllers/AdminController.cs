@@ -27,14 +27,14 @@ namespace BloodDonationSystem.Controllers;
                 PendingRequests = data.PendingRequests,
                 ApprovedRequests = data.ApprovedRequests,
                 TotalUsers = data.TotalUsers,
-                BloodTypeStats = data.BloodTypeStats.Select(s => new BloodTypeStatViewModel
+                BloodTypeStats = [.. data.BloodTypeStats.Select(s => new BloodTypeStatViewModel
                 {
                     BloodType = s.BloodType,
                     DonorCount = s.DonorCount,
                     TotalDonations = s.TotalDonations,
                     PendingDonations = s.PendingDonations,
                     RequestCount = s.RequestCount
-                }).ToList(),
+                })],
                 RecentDonations = data.RecentDonations,
                 RecentRequests = data.RecentRequests
             };
